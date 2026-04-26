@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Strefa Ucznia - Narzędziownik Psychologiczny</title>
+<style>
+/* === ZMIENNE CSS - PASTELOWE KOLORY === */
+:root {
+--bg-color: #f6f8fb;
+--nav-bg: #ffffff;
+--primary: #a8d8ea; /* błękit */
+--secondary: #aa96da; /* łagodny fiolet */
+--accent: #fcbad3; /* brzoskwinia/róż */
+--success: #c1e1c1; /* mięta */
+--text-dark: #4a4a4a;
+--text-light: #7a7a7a;
+--shadow: 0 8px 20px rgba(0,0,0,0.05);
+--radius: 20px;
+}
+
+/* === GLOBALNE USTAWIENIA === */
+* {
+box-sizing: border-box;
+margin: 0;
+padding: 0;
+font-family: 'Segoe UI', system-ui, sans-serif;
+-webkit-tap-highlight-color: transparent;
+}
+
+body {
+background-color: var(--bg-color);
+color: var(--text-dark);
+line-height: 1.6;
+padding-bottom: 80px; /* Miejsce na navbar */
+}
+
+h1, h2, h3 {
+color: var(--secondary);
+margin-bottom: 10px;
+text-align: center;
+}
+
+p {
+margin-bottom: 15px;
+text-align: center;
+}
+
+.card {
+background: white;
+border-radius: var(--radius);
+padding: 20px;
+margin: 15px;
+box-shadow: var(--shadow);
+}
+
+.btn {
+display: block;
+width: 100%;
+padding: 15px;
+border: none;
+border-radius: 15px;
+font-size: 16px;
+font-weight: 600;
+color: white;
+background-color: var(--secondary);
+cursor: pointer;
+transition: transform 0.2s, opacity 0.2s;
+margin-top: 15px;
+}
+
+.btn:active {
+transform: scale(0.98);
+opacity: 0.9;
+}
+
+/* === NAWIGACJA (BOTTOM NAVBAR) === */
+.navbar {
+position: fixed;
+bottom: 0;
+left: 0;
+width: 100%;
+background: var(--nav-bg);
+display: flex;
+justify-content: space-around;
+padding: 10px 0 15px 0;
+box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+border-top-left-radius: var(--radius);
+border-top-right-radius: var(--radius);
+z-index: 1000;
+}
+
+.nav-item {
+display: flex;
+flex-direction: column;
+align-items: center;
+color: var(--text-light);
+cursor: pointer;
+text-decoration: none;
+font-size: 12px;
+transition: color 0.3s;
+width: 25%;
+}
+
+.nav-item.active {
+color: var(--secondary);
+font-weight: bold;
+}
+
+.nav-icon {
+font-size: 24px;
+margin-bottom: 4px;
+}
+
+/* === ZARZĄDZANIE WIDOKAMI === */
+.view {
+display: none;
+animation: fadeIn 0.4s ease-in-out;
+}
+
+.view.active {
+display: block;
+}
+
+@keyframes fadeIn {
+from { opacity: 0; transform: translateY(10px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+/* === MODUŁ 1: WIRTUALNE KOŁO EMOCJI === */
+.wheel-container {
+display: flex;
+flex-direction: column;
+align-items: center;
+margin-top: 20px;
+}
+
+.wheel {
+width: 200px;
+height: 200px;
+border-radius: 50%;
+background: conic-gradient(var(--primary) 0 60deg, var(--accent) 60deg 120deg, var(--success) 120deg 180deg, var(--secondary) 180deg 240deg, #ffe0b2 240deg 300deg, #b2ebf2 300deg 360deg);
+display: flex;
+justify-content: center;
+align-items: center;
+font-size: 40px;
+box-shadow: var(--shadow);
+transition: transform 3s cubic-bezier(0.25, 0.1, 0.25, 1);
+position: relative;
+}
+
+.wheel-pointer {
+position: absolute;
+top: -20px;
+font-size: 30px;
+z-index: 10;
+}
+
+#emotion-result {
+display: none;
+margin-top: 20px;
+background: var(--success);
+color: #2c5e2c;
+}
+
+/* === MODUŁ 2: SYMULATOR WYBORÓW === */
+.choice-btn {
+background-color: var(--primary);
+margin-bottom: 10px;
+color: #333;
+}
+
+.choice-btn:nth-child(2) { background-color: var(--accent); }
+.choice-btn:nth-child(3) { background-color: var(--success); }
+
+#consequence-bubble {
+display: none;
+padding: 15px;
+border-radius: 15px;
+margin-top: 15px;
+font-weight: bold;
+text-align: center;
+animation: fadeIn 0.3s;
+}
+
+/* === MODUŁ 3: NISZCZYCIEL ZMARTWIEŃ === */
+textarea {
+width: 100%;
+height: 100px;
+border-radius: 15px;
+border: 2px solid var(--primary);
+padding: 15px;
+font-size: 16px;
+resize: none;
+outline: none;
+background: var(--bg-color);
+}
+
+.worry-cloud {
+display: none;
+width: 200px;
+height: 150px;
+background-color: #6c7a89;
+border-radius: 50px;
+margin: 40px auto;
+color: white;
+display: flex;
+justify-content: center;
+align-items: center;
+text-align: center;
+padding: 20px;
+font-size: 14px;
+cursor: pointer;
+box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+transition: transform 0.2s, background-color 0.3s;
+user-select: none;
+}
+
+#worry-success {
+display: none;
+text-align: center;
+color: var(--secondary);
+font-size: 20px;
+font-weight: bold;
+margin-top: 20px;
+}
+
+/* === MODUŁ 4: STREFA UZIEMIENIA === */
+.breathing-circle {
+width: 120px;
+height: 120px;
+border-radius: 50%;
+background: var(--primary);
+margin: 40px auto;
+display: flex;
+justify-content: center;
+align-items: center;
+color: white;
+font-weight: bold;
+font-size: 18px;
+box-shadow: 0 0 20px var(--primary);
+animation: breathe 10s infinite ease-in-out;
+}
+
+@keyframes breathe {
+0% { transform: scale(1); opacity: 0.8; }
+40% { transform: scale(1.5); opacity: 1; } /* Wdech 4s */
+100% { transform: scale(1); opacity: 0.8; } /* Wydech 6s */
+}
+
+.checklist-item {
+display: flex;
+align-items: center;
+margin-bottom: 12px;
+padding: 10px;
+background: var(--bg-color);
+border-radius: 10px;
+}
+
+.checklist-item input[type="checkbox"] {
+width: 24px;
+height: 24px;
+margin-right: 15px;
+accent-color: var(--secondary);
+}
+
+#grounding-success {
+display: none;
+background: var(--success);
+color: #2c5e2c;
+text-align: center;
+}
+</style>
+</head>
+<body>
+
+<section id="view-wheel" class="view active">
+<div class="card">
+<h2>Koło Emocji</h2>
+<p>Kliknij losuj, aby wylosować emocję i otrzymać małe wyzwanie dla siebie.</p>
+<div class="wheel-container">
+<div class="wheel-pointer">🔻</div>
+<div class="wheel" id="emotion-wheel">🎡</div>
+</div>
+<button class="btn" onclick="spinWheel()">Losuj emocję</button>
+</div>
+<div id="emotion-result" class="card">
+<h3 id="emotion-title">Emocja</h3>
+<p id="emotion-task">Zadanie do wykonania...</p>
+</div>
+</section>
+
+<section id="view-simulator" class="view">
+<div class="card">
+<h2>Symulator Wyborów</h2>
+<p>Jak zachowasz się w tej sytuacji? Wybierz opcję, która najbardziej Ci pasuje. Pamiętaj: nie ma tu złych ocen.</p>
+<div class="card" style="background: var(--bg-color); box-shadow: none; border: 1px dashed var(--secondary);">
+<h3 id="sim-scenario" style="color: var(--text-dark); font-size: 16px;">Ładowanie sytuacji...</h3>
+</div>
+<div id="sim-buttons">
+<button class="btn choice-btn" onclick="makeChoice('passive')">Opcja 1</button>
+<button class="btn choice-btn" onclick="makeChoice('aggressive')">Opcja 2</button>
+<button class="btn choice-btn" onclick="makeChoice('assertive')">Opcja 3</button>
+</div>
+<div id="consequence-bubble"></div>
+<button id="next-scenario-btn" class="btn" style="display: none; background: var(--text-dark);" onclick="loadScenario()">Następna sytuacja</button>
+</div>
+</section>
+
+<section id="view-worry" class="view">
+<div class="card">
+<h2>Niszczyciel Zmartwień</h2>
+<p>Zapisz coś, co Cię dzisiaj stresuje. Potem zamień to w chmurę i zniszcz ją swoim dotykiem.</p>
+<div id="worry-input-area">
+<textarea id="worry-text" placeholder="Co Cię dzisiaj martwi?..."></textarea>
+<button class="btn" onclick="createCloud()">Wypuść to</button>
+</div>
+<div id="worry-cloud" class="worry-cloud" style="display: none;" onclick="tapCloud()">
+<span id="worry-cloud-text">Moje zmartwienie</span>
+</div>
+<div id="worry-success">
+<p>🎉 PYK! 🎉</p>
+<p>To tylko myśl. Dałeś/aś radę ją wypuścić!</p>
+<button class="btn" style="background: var(--success); color: #333;" onclick="resetWorry()">Kolejne zmartwienie</button>
+</div>
+</div>
+</section>
+
+<section id="view-grounding" class="view">
+<div class="card">
+<h2>Strefa Uziemienia</h2>
+<p>Czujesz silny stres? Oddychaj razem z kołem i rozejrzyj się wokół siebie.</p>
+
+<div class="breathing-circle" id="breath-circle">WDECH</div>
+
+<p style="font-weight: bold; margin-top: 30px;">Technika 5-4-3-2-1</p>
+<div id="checklist">
+</div>
+</div>
+<div id="grounding-success" class="card">
+<h3>Świetnie!</h3>
+<p>Wracasz do "tu i teraz". Pamiętaj, że jesteś bezpieczny/a.</p>
+</div>
+</section>
+
+<nav class="navbar">
+<a href="#" class="nav-item active" onclick="switchView('view-wheel', this)">
+<span class="nav-icon">🎡</span>
+<span>Emocje</span>
+</a>
+<a href="#" class="nav-item" onclick="switchView('view-simulator', this)">
+<span class="nav-icon">💬</span>
+<span>Wybory</span>
+</a>
+<a href="#" class="nav-item" onclick="switchView('view-worry', this)">
+<span class="nav-icon">☁️</span>
+<span>Myśli</span>
+</a>
+<a href="#" class="nav-item" onclick="switchView('view-grounding', this)">
+<span class="nav-icon">🧘</span>
+<span>Uziemienie</span>
+</a>
+</nav>
+
+<script>
+/* === LOGIKA NAWIGACJI === */
+function switchView(viewId, navElement) {
+document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
+document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+
+document.getElementById(viewId).classList.add('active');
+navElement.classList.add('active');
+}
+
+/* === BAZA DANYCH W JS === */
+// Baza Moduł 1: Emocje i TUS
+const emotions = [
+{ name: "Złość 😡", task: "Gdzie w ciele czujesz złość, gdy się zdenerwujesz? Spróbuj teraz mocno zacisnąć pięści i powoli je rozluźnić." },
+{ name: "Radość 😊", task: "Co dzisiaj wywołało u Ciebie chociaż najmniejszy uśmiech? Pomyśl o tym przez 10 sekund." },
+{ name: "Smutek 😢", task: "Wyobraź sobie, że twój smutek to chmura na niebie. Pozwól jej po prostu płynąć. Jaki ma kształt?" },
+{ name: "Lęk 😨", task: "Rozejrzyj się po pokoju i znajdź 3 przedmioty w kolorze niebieskim. Skup na nich wzrok na chwilę." },
+{ name: "Zaskoczenie 😲", task: "Zrób teraz głęboki wdech i wyobraź sobie, że napełniasz brzuch jak balon." },
+{ name: "Wstręt 🤢", task: "Wyobraź sobie bezpieczne miejsce (np. las, plaża). Jakie zapachy tam czujesz? Skup się na tym przez chwilę." }
+];
+
+// Baza Moduł 2: Scenki
+const scenarios = [
+{
+text: "Ktoś w klasie głośno wyśmiewa Twoje hobby. Co robisz?",
+passive: { text: "Milczysz i opuszczasz wzrok, czując wstyd.", consequence: "Schowałeś/aś emocje w sobie. Pamiętaj, masz prawo do swoich pasji!", color: "#ffd3b6" },
+aggressive: { text: "Krzyczysz: 'Zamknij się, sam jesteś głupi!'", consequence: "Zrobiła się awantura. Problem nie zniknął, a stres tylko wzrósł.", color: "#ffb3b3" },
+assertive: { text: "Mówisz spokojnie: 'Lubię to robić i nie podoba mi się, że się z tego śmiejesz.'", consequence: "Postawiłeś/aś granicę! Obronienie siebie w spokojny sposób daje siłę. Brawo!", color: "#c1e1c1" }
+},
+{
+text: "Znajomy prosi o pożyczenie pracy domowej do skopiowania, a ty się napracowałeś/aś i nie chcesz tego robić.",
+passive: { text: "Oddajesz zeszyt, chociaż bardzo nie chcesz.", consequence: "Pominąłeś/aś swoje potrzeby dla kogoś innego. Następnym razem spróbuj odmówić.", color: "#ffd3b6" },
+aggressive: { text: "Rzucasz zeszytem i mówisz: 'Odpisz się, leniu!'", consequence: "Agresja niszczy relacje. Można było odmówić łagodniej.", color: "#ffb3b3" },
+assertive: { text: "Mówisz: 'Nie dam ci skopiować, ale mogę ci wytłumaczyć, jak to zrobić.'", consequence: "Jasny komunikat i propozycja uczciwej pomocy. Super zachowanie!", color: "#c1e1c1" }
+},
+{
+text: "Dostajesz słabszą ocenę ze sprawdzianu, choć uczyłeś/aś się długo.",
+passive: { text: "Myślisz: 'Jestem beznadziejny/a, nigdy się tego nie nauczę'.", consequence: "To zniekształcenie poznawcze. Jedna ocena nie świadczy o Tobie!", color: "#ffd3b6" },
+aggressive: { text: "Kłócisz się z nauczycielem i oskarżasz go o niesprawiedliwość.", consequence: "Złość przejęła kontrolę. Lepiej ochłonąć przed rozmową.", color: "#ffb3b3" },
+assertive: { text: "Pytasz nauczyciela, co możesz poprawić i na czym polegały błędy.", consequence: "Asertywne podejście do własnego rozwoju. Skupiasz się na rozwiązaniu!", color: "#c1e1c1" }
+}
+];
+
+/* === LOGIKA MODUŁ 1: KOŁO EMOCJI === */
+let currentRotation = 0;
+function spinWheel() {
+const wheel = document.getElementById('emotion-wheel');
+const resultBox = document.getElementById('emotion-result');
+
+resultBox.style.display = 'none';
+// Losowy obrót od 3 do 6 pełnych kółek + reszta
+const randomDegree = Math.floor(Math.random() * 360) + 1080;
+currentRotation += randomDegree;
+
+wheel.style.transform = `rotate(${currentRotation}deg)`;
+
+setTimeout(() => {
+const randomEmotion = emotions[Math.floor(Math.random() * emotions.length)];
+document.getElementById('emotion-title').innerText = `Wylosowano: ${randomEmotion.name}`;
+document.getElementById('emotion-task').innerText = randomEmotion.task;
+resultBox.style.display = 'block';
+}, 3000);
+}
+
+/* === LOGIKA MODUŁ 2: SYMULATOR === */
+let currentScenarioIndex = 0;
+
+function loadScenario() {
+// Losowanie scenki bez powtórzenia ostatniej, jeśli to możliwe
+let newIndex = currentScenarioIndex;
+while(newIndex === currentScenarioIndex && scenarios.length > 1) {
+newIndex = Math.floor(Math.random() * scenarios.length);
+}
+currentScenarioIndex = newIndex;
+const scenario = scenarios[currentScenarioIndex];
+
+document.getElementById('sim-scenario').innerText = scenario.text;
+const btns = document.querySelectorAll('.choice-btn');
+
+// Losowe mieszanie przycisków, żeby asertywny nie zawsze był 3.
+const options = [
+{ type: 'passive', text: scenario.passive.text },
+{ type: 'aggressive', text: scenario.aggressive.text },
+{ type: 'assertive', text: scenario.assertive.text }
+].sort(() => Math.random() - 0.5);
+
+btns.forEach((btn, index) => {
+btn.innerText = options[index].text;
+btn.onclick = () => makeChoice(options[index].type);
+btn.style.display = 'block';
+});
+
+document.getElementById('consequence-bubble').style.display = 'none';
+document.getElementById('next-scenario-btn').style.display = 'none';
+}
+
+function makeChoice(type) {
+const scenario = scenarios[currentScenarioIndex];
+const result = scenario[type];
+const bubble = document.getElementById('consequence-bubble');
+
+bubble.innerText = result.consequence;
+bubble.style.backgroundColor = result.color;
+bubble.style.display = 'block';
+
+document.querySelectorAll('.choice-btn').forEach(btn => btn.style.display = 'none');
+document.getElementById('next-scenario-btn').style.display = 'block';
+}
+
+/* === LOGIKA MODUŁ 3: NISZCZYCIEL ZMARTWIEŃ === */
+let tapCount = 0;
+
+function createCloud() {
+const text = document.getElementById('worry-text').value.trim();
+if(!text) return;
+
+document.getElementById('worry-input-area').style.display = 'none';
+const cloud = document.getElementById('worry-cloud');
+document.getElementById('worry-cloud-text').innerText = text;
+
+cloud.style.display = 'flex';
+cloud.style.opacity = '1';
+cloud.style.transform = 'scale(1)';
+cloud.style.backgroundColor = '#6c7a89'; // reset na ciemny
+tapCount = 0;
+}
+
+function tapCloud() {
+tapCount++;
+const cloud = document.getElementById('worry-cloud');
+
+if(tapCount === 1) {
+cloud.style.transform = 'scale(1.1)';
+cloud.style.backgroundColor = '#95a5a6';
+} else if (tapCount === 2) {
+cloud.style.transform = 'scale(1.2)';
+cloud.style.backgroundColor = '#bdc3c7';
+} else if (tapCount >= 3) {
+cloud.style.transform = 'scale(1.5)';
+cloud.style.opacity = '0';
+setTimeout(() => {
+cloud.style.display = 'none';
+document.getElementById('worry-success').style.display = 'block';
+}, 300);
+}
+}
+
+function resetWorry() {
+document.getElementById('worry-text').value = '';
+document.getElementById('worry-success').style.display = 'none';
+document.getElementById('worry-input-area').style.display = 'block';
+}
+
+/* === LOGIKA MODUŁ 4: UZIEMIENIE === */
+const groundingItems = [
+"5 rzeczy, które teraz widzę",
+"4 rzeczy, których mogę dotknąć",
+"3 rzeczy, które teraz słyszę",
+"2 rzeczy, których zapach czuję",
+"1 dobra rzecz o mnie samym/samej"
+];
+
+function initGrounding() {
+const list = document.getElementById('checklist');
+list.innerHTML = '';
+groundingItems.forEach((item, index) => {
+const div = document.createElement('div');
+div.className = 'checklist-item';
+div.innerHTML = `
+<input type="checkbox" id="g-item-${index}" onchange="checkGrounding()">
+<label for="g-item-${index}">${item}</label>
+`;
+list.appendChild(div);
+});
+
+// Logika napisu WDECH / WYDECH w kółku
+const circle = document.getElementById('breath-circle');
+setInterval(() => {
+circle.innerText = "WYDECH";
+setTimeout(() => { circle.innerText = "WDECH"; }, 6000); // 6s wydech, 4s wdech
+}, 10000);
+}
+
+function checkGrounding() {
+const checkboxes = document.querySelectorAll('#checklist input[type="checkbox"]');
+const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+
+if(allChecked) {
+document.getElementById('grounding-success').style.display = 'block';
+} else {
+document.getElementById('grounding-success').style.display = 'none';
+}
+}
+
+/* === INICJALIZACJA === */
+window.onload = () => {
+loadScenario();
+initGrounding();
+};
+</script>
+</body>
+</html>
