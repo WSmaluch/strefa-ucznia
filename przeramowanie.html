@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script>
+        (function () {
+            try {
+                if (localStorage.getItem('theme') === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <title>Strefa Ucznia - Przeramowanie</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="card">
+        <h2>Przeramowanie 🔁</h2>
+        <p>Wpisz trudną myśl i zamień ją na bardziej wspierające zdanie (bez udawania, że jest idealnie).</p>
+
+        <textarea id="thought" placeholder="Np. 'Nie dam rady'..."></textarea>
+        <button class="btn" onclick="reframe()">Zamień</button>
+
+        <div id="out" class="card" style="display:none; margin-top: 15px; background: var(--bg-color); box-shadow: none; border: 1px dashed var(--secondary);">
+            <h3 style="color: var(--text-dark); font-size: 16px;">Zdanie wspierające</h3>
+            <p id="outText" style="margin-bottom: 0; color: var(--text-dark);"></p>
+        </div>
+
+        <button id="save" class="btn" style="display:none; background: var(--success); color: var(--text-dark);" onclick="save()">Zapisz</button>
+        <p id="saved" style="display:none; color: var(--secondary); font-weight: bold; margin-top: 15px;">Zapisane. To dobra umiejętność. ✨</p>
+    </div>
+
+    <script>
+        let last = '';
+
+        function normalize(text) {
+            return (text || '').trim();
+        }
+
+        function makeSupport(text) {
+            const t = text.toLowerCase();
+            if (!t) return '';
+            if (t.includes('nie dam') || t.includes('nie umiem')) return 'To trudne, ale mogę zacząć od jednego małego kroku.';
+            if (t.includes('wszyscy') || t.includes('nikt')) return 'Nie wiem, co myślą inni. Mogę skupić się na tym, co robię teraz.';
+            if (t.includes('zawsze') || t.includes('nigdy')) return 'To uczucie jest silne, ale to nie znaczy, że tak będzie zawsze.';
+            if (t.includes('beznadziej') || t.includes('głupi')) return 'Mogę popełniać błędy i dalej być wartościowy/a.';
+            return 'Mogę być dla siebie trochę bardziej wyrozumiały/a. To jest wystarczające na teraz.';
+        }
+
+        function reframe() {
+            const input = normalize(document.getElementById('thought').value);
+            if (!input) return;
+            last = makeSupport(input);
+            document.getElementById('outText').innerText = last;
+            document.getElementById('out').style.display = 'block';
+            document.getElementById('save').style.display = 'block';
+            document.getElementById('saved').style.display = 'none';
+        }
+
+        function save() {
+            if (!last) return;
+            try {
+                const key = 'reframes';
+                const raw = localStorage.getItem(key);
+                const arr = raw ? JSON.parse(raw) : [];
+                arr.unshift({ text: last, at: Date.now() });
+                while (arr.length > 5) arr.pop();
+                localStorage.setItem(key, JSON.stringify(arr));
+            } catch (e) {}
+            document.getElementById('saved').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

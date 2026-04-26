@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script>
+        (function () {
+            try {
+                if (localStorage.getItem('theme') === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <title>Strefa Ucznia - Jeden Krok</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="card">
+        <h2>Jeden Krok 👣</h2>
+        <p>Gdy jest trudno — wybierz tylko 1 mały krok. Potem jeszcze 2 drobne.</p>
+
+        <textarea id="big" placeholder="Co masz do zrobienia?"></textarea>
+        <button class="btn" onclick="split()">Rozbij na kroki</button>
+
+        <div id="steps" class="card" style="display:none; margin-top: 15px; background: var(--bg-color); box-shadow:none; border: 1px dashed var(--secondary);"></div>
+
+        <button id="save" class="btn" style="display:none; background: var(--success); color: var(--text-dark);" onclick="save()">Zapisz</button>
+        <p id="msg" style="display:none; color: var(--secondary); font-weight: bold; margin-top: 15px;">Zapisane. Teraz tylko pierwszy krok. ✨</p>
+    </div>
+
+    <script>
+        const key = 'oneStep';
+
+        function split() {
+            const t = document.getElementById('big').value.trim();
+            if (!t) return;
+
+            const steps = [
+                `1) Otwieram to zadanie: ${t}`,
+                '2) Robię 2 minuty najłatwiejszej części',
+                '3) Zapisuję, co dalej (jedno zdanie)'
+            ];
+
+            const box = document.getElementById('steps');
+            box.innerHTML = '<h3 style="color: var(--text-dark); font-size: 16px;">Twoje kroki</h3>';
+            steps.forEach((s) => {
+                const p = document.createElement('p');
+                p.style.textAlign = 'left';
+                p.style.color = 'var(--text-dark)';
+                p.style.marginBottom = '8px';
+                p.innerText = s;
+                box.appendChild(p);
+            });
+
+            box.style.display = 'block';
+            document.getElementById('save').style.display = 'block';
+            document.getElementById('msg').style.display = 'none';
+        }
+
+        function save() {
+            const t = document.getElementById('big').value.trim();
+            if (!t) return;
+            try { localStorage.setItem(key, JSON.stringify({ t, at: Date.now() })); } catch (e) {}
+            document.getElementById('msg').style.display = 'block';
+        }
+
+        (function init() {
+            try {
+                const raw = localStorage.getItem(key);
+                if (!raw) return;
+                const v = JSON.parse(raw);
+                document.getElementById('big').value = v.t || '';
+            } catch (e) {}
+        })();
+    </script>
+</body>
+</html>

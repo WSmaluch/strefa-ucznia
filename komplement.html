@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script>
+        (function () {
+            try {
+                if (localStorage.getItem('theme') === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <title>Strefa Ucznia - Komplement</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="card">
+        <h2>Komplement dla Siebie 🪞</h2>
+        <p>Losuj i wybierz to, które dziś najbardziej Ci pasuje.</p>
+
+        <div class="affirmation-board" id="board" style="min-height: 100px;"></div>
+
+        <button class="btn" onclick="draw()">Losuj</button>
+        <button class="btn" style="background: var(--success); color: var(--text-dark);" onclick="save()">Zapisz</button>
+
+        <p id="msg" style="display:none; color: var(--secondary); font-weight: bold; margin-top: 15px;">Zapisane. To ma znaczenie. ✨</p>
+    </div>
+
+    <script>
+        const list = [
+            'Jestem wytrwały/a, nawet gdy jest trudno.',
+            'Mam odwagę próbować.',
+            'Jestem wartościowy/a taki/a, jaki/a jestem.',
+            'Potrafię się uczyć i robić postępy.',
+            'Jestem wrażliwy/a — to też siła.',
+            'Zasługuję na odpoczynek.'
+        ];
+
+        let current = null;
+
+        function setText(text) {
+            const board = document.getElementById('board');
+            board.innerHTML = '';
+            const btn = document.createElement('button');
+            btn.className = 'word-btn';
+            btn.style.borderColor = 'var(--secondary)';
+            btn.style.background = 'var(--bg-color)';
+            btn.style.color = 'var(--text-dark)';
+            btn.innerText = text;
+            board.appendChild(btn);
+        }
+
+        function draw() {
+            current = list[Math.floor(Math.random() * list.length)];
+            setText(current);
+            document.getElementById('msg').style.display = 'none';
+        }
+
+        function save() {
+            if (!current) return;
+            try { localStorage.setItem('compliment', current); } catch (e) {}
+            document.getElementById('msg').style.display = 'block';
+        }
+
+        (function init() {
+            let saved = null;
+            try { saved = localStorage.getItem('compliment'); } catch (e) {}
+            setText(saved || 'Kliknij „Losuj”');
+            if (saved) current = saved;
+        })();
+    </script>
+</body>
+</html>

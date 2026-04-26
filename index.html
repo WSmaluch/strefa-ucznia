@@ -3,59 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Strefa Ucznia - Emocje</title>
+    <script>
+        (function () {
+            try {
+                if (localStorage.getItem('theme') === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <title>Strefa Ucznia - Start</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="card">
-        <h2>Koło Emocji</h2>
-        <p>Kliknij losuj, aby wylosować emocję i otrzymać małe wyzwanie dla siebie.</p>
-        <div class="wheel-container">
-            <div class="wheel-pointer">🔻</div>
-            <div class="wheel" id="emotion-wheel">🎡</div>
-        </div>
-        <button class="btn" onclick="spinWheel()">Losuj emocję</button>
-    </div>
-    
-    <div id="emotion-result" class="card">
-        <h3 id="emotion-title">Emocja</h3>
-        <p id="emotion-task">Zadanie do wykonania...</p>
-    </div>
+    <button id="theme-toggle" class="theme-toggle" aria-label="Przełącz tryb ciemny">🌙</button>
 
-    <nav class="navbar">
-        <a href="index.html" class="nav-item active"><span class="nav-icon">🎡</span><span>Emocje</span></a>
-        <a href="wybory.html" class="nav-item"><span class="nav-icon">💬</span><span>Wybory</span></a>
-        <a href="mysli.html" class="nav-item"><span class="nav-icon">☁️</span><span>Myśli</span></a>
-        <a href="uziemienie.html" class="nav-item"><span class="nav-icon">🧘</span><span>Uziemienie</span></a>
-    </nav>
+    <header class="hero">
+        <h1>Cześć! 👋</h1>
+        <p style="color: white; margin-bottom: 0;">Witaj w swojej bezpiecznej strefiie. Jak mogę Ci dzisiaj pomóc?</p>
+    </header>
+
+    <div class="menu-grid">
+        <a href="emocje.html" class="menu-tile">
+            <span class="menu-tile-icon">🎡</span>
+            <span class="menu-tile-title">Koło Emocji</span>
+        </a>
+        <a href="wybory.html" class="menu-tile">
+            <span class="menu-tile-icon">💬</span>
+            <span class="menu-tile-title">Wybory</span>
+        </a>
+        <a href="mysli.html" class="menu-tile">
+            <span class="menu-tile-icon">☁️</span>
+            <span class="menu-tile-title">Zmartwienia</span>
+        </a>
+        <a href="uziemienie.html" class="menu-tile">
+            <span class="menu-tile-icon">🧘</span>
+            <span class="menu-tile-title">Uziemienie</span>
+        </a>
+        <a href="wdziecznosc.html" class="menu-tile">
+            <span class="menu-tile-icon">🏺</span>
+            <span class="menu-tile-title">Słoik Wdzięczności</span>
+        </a>
+        <a href="afirmacje.html" class="menu-tile">
+            <span class="menu-tile-icon">✨</span>
+            <span class="menu-tile-title">Budowniczy Mocy</span>
+        </a>
+
+        <a href="stopklatka.html" class="menu-tile">
+            <span class="menu-tile-icon">⏸️</span>
+            <span class="menu-tile-title">Stop-Klatka</span>
+        </a>
+        <a href="nastroj.html" class="menu-tile">
+            <span class="menu-tile-icon">😊</span>
+            <span class="menu-tile-title">Skala Nastroju</span>
+        </a>
+        <a href="detektyw.html" class="menu-tile">
+            <span class="menu-tile-icon">🕵️</span>
+            <span class="menu-tile-title">Detektyw Myśli</span>
+        </a>
+        <a href="kartyspokoju.html" class="menu-tile">
+            <span class="menu-tile-icon">🎴</span>
+            <span class="menu-tile-title">Karty Spokoju</span>
+        </a>
+        <a href="wyzwanie.html" class="menu-tile">
+            <span class="menu-tile-icon">⏱️</span>
+            <span class="menu-tile-title">Wyzwanie 2 Minuty</span>
+        </a>
+        <a href="cialo.html" class="menu-tile">
+            <span class="menu-tile-icon">🧍</span>
+            <span class="menu-tile-title">Skan Ciała</span>
+        </a>
+
+        <a href="oddech.html" class="menu-tile">
+            <span class="menu-tile-icon">🌬️</span>
+            <span class="menu-tile-title">Oddech 4–6</span>
+        </a>
+        <a href="mantra.html" class="menu-tile">
+            <span class="menu-tile-icon">🗣️</span>
+            <span class="menu-tile-title">Mantra Dnia</span>
+        </a>
+        <a href="przeramowanie.html" class="menu-tile">
+            <span class="menu-tile-icon">🔁</span>
+            <span class="menu-tile-title">Przeramowanie</span>
+        </a>
+        <a href="bingo.html" class="menu-tile">
+            <span class="menu-tile-icon">✅</span>
+            <span class="menu-tile-title">Bingo Samoopieki</span>
+        </a>
+        <a href="sukcesy.html" class="menu-tile">
+            <span class="menu-tile-icon">🏆</span>
+            <span class="menu-tile-title">3 Sukcesy</span>
+        </a>
+        <a href="granice.html" class="menu-tile">
+            <span class="menu-tile-icon">🛡️</span>
+            <span class="menu-tile-title">Trening Granic</span>
+        </a>
+        <a href="pytanie_wdziecznosci.html" class="menu-tile">
+            <span class="menu-tile-icon">❓</span>
+            <span class="menu-tile-title">Pytanie Wdzięczności</span>
+        </a>
+        <a href="koncentracja.html" class="menu-tile">
+            <span class="menu-tile-icon">🎯</span>
+            <span class="menu-tile-title">Minuta Koncentracji</span>
+        </a>
+        <a href="jeden_krok.html" class="menu-tile">
+            <span class="menu-tile-icon">👣</span>
+            <span class="menu-tile-title">Jeden Krok</span>
+        </a>
+        <a href="miesnie.html" class="menu-tile">
+            <span class="menu-tile-icon">💪</span>
+            <span class="menu-tile-title">Napręż i Puść</span>
+        </a>
+        <a href="nazwij_emocje.html" class="menu-tile">
+            <span class="menu-tile-icon">🏷️</span>
+            <span class="menu-tile-title">Nazwij Emocję</span>
+        </a>
+        <a href="komplement.html" class="menu-tile">
+            <span class="menu-tile-icon">🪞</span>
+            <span class="menu-tile-title">Komplement</span>
+        </a>
+        <a href="wsparcie.html" class="menu-tile">
+            <span class="menu-tile-icon">🤝</span>
+            <span class="menu-tile-title">Mapa Wsparcia</span>
+        </a>
+        <a href="pauza_202020.html" class="menu-tile">
+            <span class="menu-tile-icon">👀</span>
+            <span class="menu-tile-title">Pauza 20–20–20</span>
+        </a>
+        <a href="slowa_uczucia.html" class="menu-tile">
+            <span class="menu-tile-icon">🧩</span>
+            <span class="menu-tile-title">Słowa i Uczucia</span>
+        </a>
+        <a href="odwaga.html" class="menu-tile">
+            <span class="menu-tile-icon">🧗</span>
+            <span class="menu-tile-title">Mała Odwaga</span>
+        </a>
+        <a href="stop_porownania.html" class="menu-tile">
+            <span class="menu-tile-icon">🚫</span>
+            <span class="menu-tile-title">Stop Porównaniom</span>
+        </a>
+        <a href="wieczorny_reset.html" class="menu-tile">
+            <span class="menu-tile-icon">🌙</span>
+            <span class="menu-tile-title">Wieczorny Reset</span>
+        </a>
+        <a href="woda.html" class="menu-tile">
+            <span class="menu-tile-icon">💧</span>
+            <span class="menu-tile-title">Woda</span>
+        </a>
+        <a href="dzwieki.html" class="menu-tile">
+            <span class="menu-tile-icon">👂</span>
+            <span class="menu-tile-title">3 Dźwięki</span>
+        </a>
+    </div>
 
     <script>
-        const emotions = [
-            { name: "Złość 😡", task: "Gdzie w ciele czujesz złość, gdy się zdenerwujesz? Spróbuj teraz mocno zacisnąć pięści i powoli je rozluźnić." },
-            { name: "Radość 😊", task: "Co dzisiaj wywołało u Ciebie chociaż najmniejszy uśmiech? Pomyśl o tym przez 10 sekund." },
-            { name: "Smutek 😢", task: "Wyobraź sobie, że twój smutek to chmura na niebie. Pozwól jej po prostu płynąć. Jaki ma kształt?" },
-            { name: "Lęk 😨", task: "Rozejrzyj się po pokoju i znajdź 3 przedmioty w kolorze niebieskim. Skup na nich wzrok na chwilę." },
-            { name: "Zaskoczenie 😲", task: "Zrób teraz głęboki wdech i wyobraź sobie, że napełniasz brzuch jak balon." },
-            { name: "Wstręt 🤢", task: "Wyobraź sobie bezpieczne miejsce (np. las, plaża). Jakie zapachy tam czujesz? Skup się na tym przez chwilę." }
-        ];
+        (function () {
+            const themeToggle = document.getElementById('theme-toggle');
+            if (!themeToggle) return;
 
-        let currentRotation = 0;
-        function spinWheel() {
-            const wheel = document.getElementById('emotion-wheel');
-            const resultBox = document.getElementById('emotion-result');
-            resultBox.style.display = 'none';
-            const randomDegree = Math.floor(Math.random() * 360) + 1080; 
-            currentRotation += randomDegree;
-            wheel.style.transform = `rotate(${currentRotation}deg)`;
-            
-            setTimeout(() => {
-                const randomEmotion = emotions[Math.floor(Math.random() * emotions.length)];
-                document.getElementById('emotion-title').innerText = `Wylosowano: ${randomEmotion.name}`;
-                document.getElementById('emotion-task').innerText = randomEmotion.task;
-                resultBox.style.display = 'block';
-            }, 3000);
-        }
+            function applyTheme(theme) {
+                if (theme === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                    themeToggle.innerText = '☀️';
+                } else {
+                    document.documentElement.removeAttribute('data-theme');
+                    themeToggle.innerText = '🌙';
+                }
+            }
+
+            function getSavedTheme() {
+                try { return localStorage.getItem('theme') || 'light'; } catch (e) { return 'light'; }
+            }
+
+            function saveTheme(theme) {
+                try { localStorage.setItem('theme', theme); } catch (e) {}
+            }
+
+            const initialTheme = getSavedTheme();
+            applyTheme(initialTheme);
+
+            themeToggle.addEventListener('click', () => {
+                const current = getSavedTheme();
+                const next = current === 'dark' ? 'light' : 'dark';
+                saveTheme(next);
+                applyTheme(next);
+            });
+        })();
     </script>
+
 </body>
 </html>

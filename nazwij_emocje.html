@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script>
+        (function () {
+            try {
+                if (localStorage.getItem('theme') === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <title>Strefa Ucznia - Nazwij Emocję</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="card">
+        <h2>Nazwij Emocję 🏷️</h2>
+        <p>Wybierz emocję i jej siłę. Dostaniesz prostą wskazówkę.</p>
+
+        <div class="word-bank">
+            <button class="word-btn" onclick="pick('stres')">Stres</button>
+            <button class="word-btn" onclick="pick('lek')">Lęk</button>
+            <button class="word-btn" onclick="pick('zlosc')">Złość</button>
+            <button class="word-btn" onclick="pick('smutek')">Smutek</button>
+            <button class="word-btn" onclick="pick('wstyd')">Wstyd</button>
+            <button class="word-btn" onclick="pick('rado')">Radość</button>
+        </div>
+
+        <p style="font-size: 12px; color: var(--text-light); margin-top: 15px;">Siła (1–10)</p>
+        <input id="intensity" type="range" min="1" max="10" value="5" style="width: 100%;">
+
+        <button class="btn" onclick="show()">Pokaż wskazówkę</button>
+
+        <div id="box" class="card" style="display:none; margin-top: 15px; background: var(--success); color: var(--text-dark);">
+            <h3 id="title" style="color: var(--text-dark);">Wskazówka</h3>
+            <p id="text" style="margin-bottom: 0;"></p>
+        </div>
+    </div>
+
+    <script>
+        let current = null;
+
+        const names = {
+            stres: 'Stres',
+            lek: 'Lęk',
+            zlosc: 'Złość',
+            smutek: 'Smutek',
+            wstyd: 'Wstyd',
+            rado: 'Radość'
+        };
+
+        function pick(k) {
+            current = k;
+            document.getElementById('box').style.display = 'none';
+        }
+
+        function tip(kind, intensity) {
+            if (!kind) return 'Wybierz emocję u góry.';
+            if (intensity >= 8) return 'Najpierw ciało: 3 dłuższe wydechy. Potem jeden mały krok.';
+            if (kind === 'lek') return 'Sprawdź fakty: co jest pewne, a co domyślane? Zrób 3 oddechy.';
+            if (kind === 'zlosc') return 'Złość mówi o granicy. Powiedz spokojnie „stop” i nazwij potrzebę.';
+            if (kind === 'smutek') return 'Daj sobie życzliwość: chwila odpoczynku, ciepły napój lub rozmowa.';
+            if (kind === 'wstyd') return 'Wstyd lubi ciszę. Powiedz sobie: „Nie jestem sam/a”.' ;
+            if (kind === 'rado') return 'Utrwal: zapisz jedną rzecz, co to spowodowało.';
+            return 'Zrób mały reset: woda + 10 sekund patrzenia w dal.';
+        }
+
+        function show() {
+            const intensity = Number(document.getElementById('intensity').value);
+            document.getElementById('title').innerText = `Emocja: ${current ? names[current] : '—'} (${intensity}/10)`;
+            document.getElementById('text').innerText = tip(current, intensity);
+            document.getElementById('box').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script>
+        (function () {
+            try {
+                if (localStorage.getItem('theme') === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <title>Strefa Ucznia - Koncentracja</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="card">
+        <h2>Minuta Koncentracji 🎯</h2>
+        <p>1 minuta skupienia na jednej rzeczy. Tylko tyle.</p>
+
+        <textarea id="task" placeholder="Na czym mam się skupić przez 1 minutę?"></textarea>
+
+        <div class="card" style="background: var(--bg-color); box-shadow: none; border: 1px dashed var(--secondary); margin-top: 10px;">
+            <h3 id="timer" style="color: var(--text-dark); font-size: 22px;">01:00</h3>
+            <p id="hint" style="margin-bottom: 0; color: var(--text-dark);">Kliknij Start.</p>
+        </div>
+
+        <button id="start" class="btn" onclick="start()">Start</button>
+        <button id="stop" class="btn" style="display:none; background: var(--text-dark);" onclick="reset()">Reset</button>
+
+        <p id="done" style="display:none; color: var(--secondary); font-weight: bold; margin-top: 15px;">Zrobione. To się liczy. ✨</p>
+    </div>
+
+    <script>
+        let id = null;
+        let remaining = 60;
+
+        function format(sec) {
+            const m = String(Math.floor(sec / 60)).padStart(2, '0');
+            const s = String(sec % 60).padStart(2, '0');
+            return `${m}:${s}`;
+        }
+
+        function setUI(running) {
+            document.getElementById('start').style.display = running ? 'none' : 'block';
+            document.getElementById('stop').style.display = running ? 'block' : 'none';
+        }
+
+        function start() {
+            if (id) return;
+            document.getElementById('done').style.display = 'none';
+            const task = document.getElementById('task').value.trim() || 'jednej rzeczy';
+            document.getElementById('hint').innerText = `Skup się na: ${task}`;
+            remaining = 60;
+            document.getElementById('timer').innerText = format(remaining);
+            setUI(true);
+
+            id = setInterval(() => {
+                remaining -= 1;
+                document.getElementById('timer').innerText = format(remaining);
+                if (remaining <= 0) {
+                    clearInterval(id);
+                    id = null;
+                    setUI(false);
+                    document.getElementById('hint').innerText = 'Koniec.';
+                    document.getElementById('done').style.display = 'block';
+                }
+            }, 1000);
+        }
+
+        function reset() {
+            if (id) {
+                clearInterval(id);
+                id = null;
+            }
+            remaining = 60;
+            document.getElementById('timer').innerText = '01:00';
+            document.getElementById('hint').innerText = 'Kliknij Start.';
+            document.getElementById('done').style.display = 'none';
+            setUI(false);
+        }
+    </script>
+</body>
+</html>

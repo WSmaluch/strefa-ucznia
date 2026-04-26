@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script>
+        (function () {
+            try {
+                if (localStorage.getItem('theme') === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <title>Strefa Ucznia - Mantra</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="card">
+        <h2>Mantra Dnia 🗣️</h2>
+        <p>Wylosuj zdanie, które pomaga wrócić do spokoju. Powtórz je 3 razy.</p>
+
+        <div class="affirmation-board" id="board" style="min-height: 100px;">
+            <button class="word-btn" style="border-color: var(--secondary); background: var(--bg-color); color: var(--text-dark);">Kliknij „Losuj”</button>
+        </div>
+
+        <button class="btn" onclick="draw()">Losuj</button>
+        <button class="btn" style="background: var(--success); color: var(--text-dark);" onclick="save()">Zapisz na dziś</button>
+
+        <p id="saved" style="display:none; color: var(--secondary); font-weight: bold; margin-top: 15px;">Zapisane. Możesz do tego wracać. ✨</p>
+    </div>
+
+    <script>
+        const mantras = [
+            'Robię, co mogę – to wystarczy na teraz.',
+            'Mogę robić małe kroki.',
+            'Moje emocje są ważne, ale nie rządzą mną.',
+            'Oddycham. Jestem tu i teraz.',
+            'Nie muszę być idealny/a, żeby być wartościowy/a.',
+            'Mam prawo prosić o pomoc.'
+        ];
+
+        let current = null;
+
+        function setText(text) {
+            const board = document.getElementById('board');
+            board.innerHTML = '';
+            const btn = document.createElement('button');
+            btn.className = 'word-btn';
+            btn.style.borderColor = 'var(--secondary)';
+            btn.style.background = 'var(--bg-color)';
+            btn.style.color = 'var(--text-dark)';
+            btn.innerText = text;
+            board.appendChild(btn);
+        }
+
+        function draw() {
+            current = mantras[Math.floor(Math.random() * mantras.length)];
+            setText(current);
+            document.getElementById('saved').style.display = 'none';
+        }
+
+        function save() {
+            if (!current) return;
+            try { localStorage.setItem('mantraToday', current); } catch (e) {}
+            document.getElementById('saved').style.display = 'block';
+        }
+
+        (function init() {
+            try {
+                const saved = localStorage.getItem('mantraToday');
+                if (saved) {
+                    current = saved;
+                    setText(saved);
+                }
+            } catch (e) {}
+        })();
+    </script>
+</body>
+</html>

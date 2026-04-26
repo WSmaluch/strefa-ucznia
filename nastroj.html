@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script>
+        (function () {
+            try {
+                if (localStorage.getItem('theme') === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <title>Strefa Ucznia - Skala Nastroju</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="card">
+        <h2>Skala Nastroju 😊</h2>
+        <p>Sprawdź swój nastrój w skali 1–10 i dostaniesz małą podpowiedź, co może pomóc.</p>
+
+        <div class="card" style="background: var(--bg-color); box-shadow: none; border: 1px dashed var(--secondary);">
+            <h3 id="mood-emoji" style="color: var(--text-dark); font-size: 26px; margin-bottom: 5px;">🙂</h3>
+            <p id="mood-label" style="margin-bottom: 0; color: var(--text-dark); font-weight: bold;">Nastrój: 5/10</p>
+        </div>
+
+        <input id="mood" type="range" min="1" max="10" value="5" style="width: 100%; margin-top: 15px;">
+
+        <button class="btn" onclick="saveMood()">Zapisz na dziś</button>
+
+        <div id="tip" class="card" style="display:none; background: var(--success); color: var(--text-dark); margin-top: 15px;">
+            <h3 style="color: var(--text-dark);">Mała podpowiedź</h3>
+            <p id="tip-text" style="margin-bottom: 0;"></p>
+        </div>
+
+        <p id="saved" style="display:none; color: var(--secondary); font-weight: bold; margin-top: 15px;">Zapisane. Jesteś ważny/a. ❤️</p>
+    </div>
+
+    <script>
+        const moodEl = document.getElementById('mood');
+        const emojiEl = document.getElementById('mood-emoji');
+        const labelEl = document.getElementById('mood-label');
+
+        function moodEmoji(value) {
+            if (value <= 2) return '😔';
+            if (value <= 4) return '😕';
+            if (value <= 6) return '🙂';
+            if (value <= 8) return '😊';
+            return '😄';
+        }
+
+        function moodTip(value) {
+            if (value <= 2) return 'Zrób coś bardzo małego: woda + 3 oddechy. Jeśli możesz, powiedz komuś zaufanemu, jak się czujesz.';
+            if (value <= 4) return 'Spróbuj krótkiego spaceru albo rozciągania przez 2 minuty. Małe kroki liczą się najbardziej.';
+            if (value <= 6) return 'To dobry moment na reset: porządek na biurku, krótka muzyka albo kilka spokojnych oddechów.';
+            if (value <= 8) return 'Utrwal to: zapisz jedną rzecz, która dziś zadziałała na plus.';
+            return 'Super! Podziel się dobrem: powiedz coś miłego komuś (albo sobie).';
+        }
+
+        function updateUI() {
+            const value = Number(moodEl.value);
+            emojiEl.innerText = moodEmoji(value);
+            labelEl.innerText = `Nastrój: ${value}/10`;
+            document.getElementById('tip').style.display = 'block';
+            document.getElementById('tip-text').innerText = moodTip(value);
+            document.getElementById('saved').style.display = 'none';
+        }
+
+        function saveMood() {
+            const value = Number(moodEl.value);
+            try { localStorage.setItem('lastMood', String(value)); } catch (e) {}
+            document.getElementById('saved').style.display = 'block';
+        }
+
+        moodEl.addEventListener('input', updateUI);
+
+        (function init() {
+            let initial = 5;
+            try {
+                const saved = localStorage.getItem('lastMood');
+                if (saved) initial = Math.min(10, Math.max(1, Number(saved)));
+            } catch (e) {}
+            moodEl.value = String(initial);
+            updateUI();
+        })();
+    </script>
+</body>
+</html>

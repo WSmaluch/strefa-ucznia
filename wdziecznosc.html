@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script>
+        (function () {
+            try {
+                if (localStorage.getItem('theme') === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <title>Strefa Ucznia - Wdzięczność</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="card">
+        <h2>Słoik Wdzięczności</h2>
+        <p>Znajdź chociaż jedną małą rzecz, za którą jesteś dziś wdzięczny/a. To może być pyszny obiad albo ładna pogoda.</p>
+        
+        <textarea id="gratitude-text" placeholder="Dzisiaj cieszę się z..." style="height: 80px;"></textarea>
+        <button class="btn" onclick="addNote()">Wrzuć do słoika</button>
+
+        <div class="jar-container">
+            <div class="jar" id="jar">
+                </div>
+        </div>
+    </div>
+
+    
+
+    <script>
+        function addNote() {
+            const input = document.getElementById('gratitude-text');
+            if(!input.value.trim()) return;
+            
+            const jar = document.getElementById('jar');
+            const note = document.createElement('div');
+            note.className = 'jar-note';
+            note.innerText = input.value;
+            
+            jar.appendChild(note);
+            input.value = '';
+            
+            // Limit karteczek, żeby nie wywaliło słoika (max 5 najnowszych)
+            if(jar.children.length > 5) {
+                jar.removeChild(jar.firstChild);
+            }
+        }
+    </script>
+</body>
+</html>

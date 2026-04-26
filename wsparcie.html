@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script>
+        (function () {
+            try {
+                if (localStorage.getItem('theme') === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <title>Strefa Ucznia - Wsparcie</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="card">
+        <h2>Mapa Wsparcia 🤝</h2>
+        <p>Wybierz osobę, do której możesz się odezwać. Dostaniesz gotową wiadomość.</p>
+
+        <div class="word-bank">
+            <button class="word-btn" onclick="pick('rodzic')">Rodzic / opiekun</button>
+            <button class="word-btn" onclick="pick('kolega')">Kolega / koleżanka</button>
+            <button class="word-btn" onclick="pick('nauczyciel')">Nauczyciel</button>
+            <button class="word-btn" onclick="pick('psycholog')">Psycholog</button>
+        </div>
+
+        <textarea id="topic" placeholder="O co chodzi (1 zdanie)?" style="margin-top: 10px;"></textarea>
+        <button class="btn" onclick="generate()">Ułóż wiadomość</button>
+
+        <div id="box" class="card" style="display:none; margin-top: 15px; background: var(--bg-color); box-shadow:none; border: 1px dashed var(--secondary);">
+            <h3 style="color: var(--text-dark); font-size: 16px;">Wiadomość</h3>
+            <p id="msg" style="margin-bottom: 0; color: var(--text-dark);"></p>
+        </div>
+
+        <button id="save" class="btn" style="display:none; background: var(--success); color: var(--text-dark);" onclick="save()">Zapisz</button>
+        <p id="saved" style="display:none; color: var(--secondary); font-weight: bold; margin-top: 15px;">Zapisane. Proszenie o pomoc to siła. ✨</p>
+    </div>
+
+    <script>
+        let who = null;
+        const key = 'supportMessage';
+
+        function pick(x) {
+            who = x;
+            document.getElementById('saved').style.display = 'none';
+        }
+
+        function label(x) {
+            if (x === 'rodzic') return 'Cześć, potrzebuję Twojego wsparcia.';
+            if (x === 'kolega') return 'Hej, możesz chwilę pogadać?';
+            if (x === 'nauczyciel') return 'Dzień dobry, chciałbym/chciałabym porozmawiać.';
+            if (x === 'psycholog') return 'Dzień dobry, potrzebuję wsparcia.';
+            return 'Cześć,';
+        }
+
+        function generate() {
+            const topic = document.getElementById('topic').value.trim();
+            if (!who) return;
+            const base = label(who);
+            const body = topic ? ` Chodzi o: ${topic}` : ' Chodzi o coś trudnego dla mnie.';
+            const ask = ' Czy możemy porozmawiać dziś lub jutro?';
+            const text = base + body + ask;
+            document.getElementById('msg').innerText = text;
+            document.getElementById('box').style.display = 'block';
+            document.getElementById('save').style.display = 'block';
+        }
+
+        function save() {
+            const text = document.getElementById('msg').innerText.trim();
+            if (!text) return;
+            try { localStorage.setItem(key, JSON.stringify({ text, at: Date.now() })); } catch (e) {}
+            document.getElementById('saved').style.display = 'block';
+        }
+
+        (function init() {
+            try {
+                const raw = localStorage.getItem(key);
+                if (!raw) return;
+                const v = JSON.parse(raw);
+                document.getElementById('msg').innerText = v.text;
+                document.getElementById('box').style.display = 'block';
+                document.getElementById('save').style.display = 'block';
+            } catch (e) {}
+        })();
+    </script>
+</body>
+</html>

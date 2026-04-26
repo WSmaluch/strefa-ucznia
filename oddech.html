@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script>
+        (function () {
+            try {
+                if (localStorage.getItem('theme') === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <title>Strefa Ucznia - Oddech</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="card">
+        <h2>Oddech 4–6 🌬️</h2>
+        <p>Krótki oddech na uspokojenie: 4 sekundy wdech, 6 sekund wydech.</p>
+
+        <div class="card" style="background: var(--bg-color); box-shadow: none; border: 1px dashed var(--secondary);">
+            <h3 id="phase" style="color: var(--text-dark); font-size: 18px;">Gotowy/a?</h3>
+            <p id="count" style="margin-bottom: 0; color: var(--text-dark); font-weight: bold; font-size: 22px;">00</p>
+        </div>
+
+        <button id="start" class="btn" onclick="start()">Start</button>
+        <button id="stop" class="btn" style="display:none; background: var(--text-dark);" onclick="stop()">Stop</button>
+
+        <p id="msg" style="display:none; color: var(--secondary); font-weight: bold; margin-top: 15px;">Dobrze. Twój układ nerwowy lubi powtarzalność. ✨</p>
+    </div>
+
+    <script>
+        let intervalId = null;
+        let phase = 'idle';
+        let remaining = 0;
+
+        function setUI(running) {
+            document.getElementById('start').style.display = running ? 'none' : 'block';
+            document.getElementById('stop').style.display = running ? 'block' : 'none';
+        }
+
+        function setPhase(nextPhase, seconds) {
+            phase = nextPhase;
+            remaining = seconds;
+            document.getElementById('phase').innerText = nextPhase === 'in' ? 'WDECH' : 'WYDECH';
+            document.getElementById('count').innerText = String(remaining).padStart(2, '0');
+        }
+
+        function tick() {
+            remaining -= 1;
+            if (remaining <= 0) {
+                if (phase === 'in') setPhase('out', 6);
+                else setPhase('in', 4);
+                return;
+            }
+            document.getElementById('count').innerText = String(remaining).padStart(2, '0');
+        }
+
+        function start() {
+            if (intervalId) return;
+            document.getElementById('msg').style.display = 'none';
+            setPhase('in', 4);
+            setUI(true);
+            intervalId = setInterval(tick, 1000);
+        }
+
+        function stop() {
+            if (intervalId) {
+                clearInterval(intervalId);
+                intervalId = null;
+            }
+            phase = 'idle';
+            remaining = 0;
+            setUI(false);
+            document.getElementById('phase').innerText = 'Gotowy/a?';
+            document.getElementById('count').innerText = '00';
+            document.getElementById('msg').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

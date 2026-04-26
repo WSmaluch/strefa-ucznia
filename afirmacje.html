@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script>
+        (function () {
+            try {
+                if (localStorage.getItem('theme') === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <title>Strefa Ucznia - Afirmacje</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="card">
+        <h2>Budowniczy Mocy</h2>
+        <p>Zbuduj zdanie, które doda Ci sił. Klikaj w słowa na dole, by ułożyć je na tablicy. Aby cofnąć, kliknij słowo na tablicy.</p>
+        
+        <div class="affirmation-board" id="board">
+            </div>
+
+        <p style="font-size: 12px; color: var(--text-light);">Magazyn słów:</p>
+        <div class="word-bank" id="bank">
+            <button class="word-btn" onclick="moveWord(this)">Mam prawo</button>
+            <button class="word-btn" onclick="moveWord(this)">Jestem</button>
+            <button class="word-btn" onclick="moveWord(this)">Zasługuję na</button>
+            <button class="word-btn" onclick="moveWord(this)">wystarczający/a</button>
+            <button class="word-btn" onclick="moveWord(this)">spokój</button>
+            <button class="word-btn" onclick="moveWord(this)">popełniać błędy</button>
+            <button class="word-btn" onclick="moveWord(this)">odpoczynek</button>
+            <button class="word-btn" onclick="moveWord(this)">silny/a</button>
+            <button class="word-btn" onclick="moveWord(this)">być sobą</button>
+        </div>
+
+        <button class="btn" style="background: var(--success); color: var(--text-dark);" onclick="finishAffirmation()">Odczytaj na głos 📢</button>
+        <p id="success-msg" style="display:none; color: var(--secondary); font-weight: bold; margin-top: 15px;">Świetnie! Pamiętaj o tym przez cały dzień! ✨</p>
+    </div>
+
+    
+
+    <script>
+        function moveWord(btn) {
+            const board = document.getElementById('board');
+            
+            // Tworzymy kopię guzika na tablicy
+            const newBtn = document.createElement('button');
+            newBtn.className = 'word-btn';
+            newBtn.innerText = btn.innerText;
+            
+            // Po kliknięciu na tablicy - znika z niej i wraca do magazynu
+            newBtn.onclick = function() {
+                this.remove();
+                btn.style.display = 'inline-block';
+            };
+            
+            board.appendChild(newBtn);
+            btn.style.display = 'none'; // Chowamy z magazynu
+            document.getElementById('success-msg').style.display = 'none';
+        }
+
+        function finishAffirmation() {
+            const board = document.getElementById('board');
+            if(board.children.length > 0) {
+                document.getElementById('success-msg').style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>

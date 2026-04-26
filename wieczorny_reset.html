@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script>
+        (function () {
+            try {
+                if (localStorage.getItem('theme') === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <title>Strefa Ucznia - Wieczorny Reset</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="card">
+        <h2>Wieczorny Reset 🌙</h2>
+        <p>Odhacz 3 małe rzeczy przed snem. Nie musisz robić wszystkiego.</p>
+
+        <div id="list" class="card" style="background: var(--bg-color); box-shadow:none; border: 1px dashed var(--secondary);"></div>
+
+        <button class="btn" style="background: var(--success); color: var(--text-dark);" onclick="save()">Zapisz</button>
+        <button class="btn" style="background: var(--text-dark);" onclick="clearAll()">Wyczyść</button>
+
+        <p id="msg" style="display:none; color: var(--secondary); font-weight: bold; margin-top: 15px;">Dobrze. Jutro będzie łatwiej. ✨</p>
+    </div>
+
+    <script>
+        const items = [
+            'Woda / herbata',
+            'Odłożenie telefonu na chwilę',
+            'Krótka higiena',
+            '1 miłe zdanie do siebie',
+            'Spakowanie jednej rzeczy na jutro',
+            '3 spokojne oddechy'
+        ];
+        const key = 'nightReset';
+
+        function render(state) {
+            const box = document.getElementById('list');
+            box.innerHTML = '';
+            items.forEach((t, i) => {
+                const row = document.createElement('div');
+                row.className = 'checklist-item';
+                const cb = document.createElement('input');
+                cb.type = 'checkbox';
+                cb.checked = !!state[i];
+                cb.onchange = () => {
+                    state[i] = cb.checked;
+                    try { localStorage.setItem(key, JSON.stringify(state)); } catch (e) {}
+                    document.getElementById('msg').style.display = 'none';
+                };
+                const label = document.createElement('label');
+                label.style.color = 'var(--text-dark)';
+                label.innerText = t;
+                row.appendChild(cb);
+                row.appendChild(label);
+                box.appendChild(row);
+            });
+        }
+
+        function load() {
+            try {
+                const raw = localStorage.getItem(key);
+                return raw ? JSON.parse(raw) : {};
+            } catch (e) {
+                return {};
+            }
+        }
+
+        let state = load();
+        render(state);
+
+        function save() {
+            document.getElementById('msg').style.display = 'block';
+            try { localStorage.setItem(key, JSON.stringify(state)); } catch (e) {}
+        }
+
+        function clearAll() {
+            state = {};
+            try { localStorage.removeItem(key); } catch (e) {}
+            render(state);
+            document.getElementById('msg').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script>
+        (function () {
+            try {
+                if (localStorage.getItem('theme') === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <title>Strefa Ucznia - Pauza 20-20-20</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="card">
+        <h2>Pauza 20–20–20 👀</h2>
+        <p>Gdy siedzisz przy ekranie: co 20 minut popatrz 20 sekund daleko (min. 6 metrów).</p>
+
+        <div class="card" style="background: var(--bg-color); box-shadow:none; border: 1px dashed var(--secondary);">
+            <h3 id="state" style="color: var(--text-dark); font-size: 16px;">Kliknij Start</h3>
+            <p id="time" style="margin-bottom: 0; color: var(--text-dark); font-weight: bold; font-size: 22px;">20:00</p>
+        </div>
+
+        <button id="start" class="btn" onclick="start()">Start</button>
+        <button id="reset" class="btn" style="display:none; background: var(--text-dark);" onclick="reset()">Reset</button>
+
+        <p id="msg" style="display:none; color: var(--secondary); font-weight: bold; margin-top: 15px;">Dobra robota. Oczy też potrzebują przerwy. ✨</p>
+    </div>
+
+    <script>
+        let id = null;
+        let remaining = 20 * 60;
+        let mode = 'work';
+
+        function fmt(sec) {
+            const m = String(Math.floor(sec / 60)).padStart(2, '0');
+            const s = String(sec % 60).padStart(2, '0');
+            return `${m}:${s}`;
+        }
+
+        function setUI(running) {
+            document.getElementById('start').style.display = running ? 'none' : 'block';
+            document.getElementById('reset').style.display = running ? 'block' : 'none';
+        }
+
+        function start() {
+            if (id) return;
+            document.getElementById('msg').style.display = 'none';
+            mode = 'work';
+            remaining = 20 * 60;
+            document.getElementById('state').innerText = 'Czas pracy';
+            document.getElementById('time').innerText = fmt(remaining);
+            setUI(true);
+
+            id = setInterval(() => {
+                remaining -= 1;
+                document.getElementById('time').innerText = fmt(remaining);
+
+                if (remaining <= 0) {
+                    if (mode === 'work') {
+                        mode = 'break';
+                        remaining = 20;
+                        document.getElementById('state').innerText = 'Pauza: popatrz daleko';
+                    } else {
+                        mode = 'work';
+                        remaining = 20 * 60;
+                        document.getElementById('state').innerText = 'Czas pracy';
+                        document.getElementById('msg').style.display = 'block';
+                    }
+                }
+            }, 1000);
+        }
+
+        function reset() {
+            if (id) {
+                clearInterval(id);
+                id = null;
+            }
+            setUI(false);
+            document.getElementById('state').innerText = 'Kliknij Start';
+            document.getElementById('time').innerText = '20:00';
+            document.getElementById('msg').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

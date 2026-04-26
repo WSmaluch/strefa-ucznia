@@ -1,136 +1,93 @@
-/* === ZMIENNE CSS - PASTELOWE KOLORY === */
 :root {
-    --bg-color: #f6f8fb;
-    --nav-bg: #ffffff;
-    --primary: #a8d8ea; /* błękit */
-    --secondary: #aa96da; /* łagodny fiolet */
-    --accent: #fcbad3; /* brzoskwinia/róż */
-    --success: #c1e1c1; /* mięta */
-    --text-dark: #4a4a4a;
-    --text-light: #7a7a7a;
-    --shadow: 0 8px 20px rgba(0,0,0,0.05);
-    --radius: 20px;
+    --bg-color: #f6f8fb; --nav-bg: #ffffff; --card-bg: #ffffff; --primary: #a8d8ea; --secondary: #aa96da; 
+    --accent: #fcbad3; --success: #c1e1c1; --text-dark: #4a4a4a; --text-light: #7a7a7a; 
+    --success-text: #2c5e2c;
+    --wheel-warm: #ffe0b2; --wheel-cool: #b2ebf2;
+    --cloud-1: #6c7a89; --cloud-2: #95a5a6; --cloud-3: #bdc3c7;
+    --jar-lid: #dcdde1; --note-bg: #fff9c4; --note-accent: #f1c40f;
+    --choice-passive: #ffd3b6; --choice-aggressive: #ffb3b3; --choice-assertive: #c1e1c1;
+    --shadow: 0 8px 20px rgba(0,0,0,0.05); --radius: 20px;
 }
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
+body { background-color: var(--bg-color); color: var(--text-dark); line-height: 1.6; padding-bottom: 80px; }
+h1, h2, h3 { color: var(--secondary); margin-bottom: 10px; text-align: center; }
+p { margin-bottom: 15px; text-align: center; }
+.card { background: var(--card-bg); border-radius: var(--radius); padding: 20px; margin: 15px; box-shadow: var(--shadow); animation: fadeIn 0.4s ease-in-out; }
+.btn { display: block; width: 100%; padding: 15px; border: none; border-radius: 15px; font-size: 16px; font-weight: 600; color: white; background-color: var(--secondary); cursor: pointer; transition: 0.2s; margin-top: 15px; }
+.btn:active { transform: scale(0.98); opacity: 0.9; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-/* === GLOBALNE USTAWIENIA === */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', system-ui, sans-serif;
-    -webkit-tap-highlight-color: transparent;
-}
+/* NAWIGACJA */
+.navbar { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--nav-bg); display: flex; justify-content: space-around; padding: 10px 0 15px 0; box-shadow: 0 -4px 20px rgba(0,0,0,0.05); border-top-left-radius: var(--radius); border-top-right-radius: var(--radius); z-index: 1000; }
+.nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-light); text-decoration: none; font-size: 12px; width: 25%; }
+.nav-item.active { color: var(--secondary); font-weight: bold; }
+.nav-icon { font-size: 24px; margin-bottom: 4px; }
 
-body {
-    background-color: var(--bg-color);
-    color: var(--text-dark);
-    line-height: 1.6;
-    padding-bottom: 80px; /* Miejsce na navbar */
-}
+/* MENU STARTOWE */
+.hero { background: linear-gradient(135deg, var(--primary), var(--secondary)); padding: 40px 20px 30px; border-radius: 0 0 30px 30px; color: white; text-align: center; margin-bottom: 20px; box-shadow: var(--shadow); }
+.hero h1 { color: white; font-size: 24px; }
+.menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 15px; }
+.menu-tile { background: var(--card-bg); border-radius: var(--radius); padding: 25px 10px; text-align: center; text-decoration: none; color: var(--text-dark); box-shadow: var(--shadow); transition: 0.2s; display: flex; flex-direction: column; align-items: center; }
+.menu-tile:active { transform: scale(0.95); }
+.menu-tile-icon { font-size: 35px; margin-bottom: 10px; }
+.menu-tile-title { font-size: 14px; font-weight: bold; }
 
-h1, h2, h3 {
-    color: var(--secondary);
-    margin-bottom: 10px;
-    text-align: center;
-}
-
-p {
-    margin-bottom: 15px;
-    text-align: center;
-}
-
-.card {
-    background: white;
-    border-radius: var(--radius);
-    padding: 20px;
-    margin: 15px;
-    box-shadow: var(--shadow);
-    animation: fadeIn 0.4s ease-in-out;
-}
-
-.btn {
-    display: block;
-    width: 100%;
-    padding: 15px;
-    border: none;
-    border-radius: 15px;
-    font-size: 16px;
-    font-weight: 600;
-    color: white;
-    background-color: var(--secondary);
-    cursor: pointer;
-    transition: transform 0.2s, opacity 0.2s;
-    margin-top: 15px;
-}
-
-.btn:active {
-    transform: scale(0.98);
-    opacity: 0.9;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* === NAWIGACJA (BOTTOM NAVBAR) === */
-.navbar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: var(--nav-bg);
-    display: flex;
-    justify-content: space-around;
-    padding: 10px 0 15px 0;
-    box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
-    border-top-left-radius: var(--radius);
-    border-top-right-radius: var(--radius);
-    z-index: 1000;
-}
-
-.nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    color: var(--text-light);
-    cursor: pointer;
-    text-decoration: none;
-    font-size: 12px;
-    transition: color 0.3s;
-    width: 25%;
-}
-
-.nav-item.active {
-    color: var(--secondary);
-    font-weight: bold;
-}
-
-.nav-icon {
-    font-size: 24px;
-    margin-bottom: 4px;
-}
-
-/* === KOŁO EMOCJI === */
+/* STARE GRY (Koło, Wybory, Zmartwienia, Uziemienie) */
 .wheel-container { display: flex; flex-direction: column; align-items: center; margin-top: 20px; }
-.wheel { width: 200px; height: 200px; border-radius: 50%; background: conic-gradient(var(--primary) 0 60deg, var(--accent) 60deg 120deg, var(--success) 120deg 180deg, var(--secondary) 180deg 240deg, #ffe0b2 240deg 300deg, #b2ebf2 300deg 360deg); display: flex; justify-content: center; align-items: center; font-size: 40px; box-shadow: var(--shadow); transition: transform 3s cubic-bezier(0.25, 0.1, 0.25, 1); position: relative; }
+.wheel { width: 200px; height: 200px; border-radius: 50%; background: conic-gradient(var(--primary) 0 60deg, var(--accent) 60deg 120deg, var(--success) 120deg 180deg, var(--secondary) 180deg 240deg, var(--wheel-warm) 240deg 300deg, var(--wheel-cool) 300deg 360deg); display: flex; justify-content: center; align-items: center; font-size: 40px; box-shadow: var(--shadow); transition: transform 3s cubic-bezier(0.25, 0.1, 0.25, 1); position: relative; }
 .wheel-pointer { position: absolute; top: -20px; font-size: 30px; z-index: 10; }
-#emotion-result { display: none; margin-top: 20px; background: var(--success); color: #2c5e2c; }
-
-/* === SYMULATOR WYBORÓW === */
-.choice-btn { background-color: var(--primary); margin-bottom: 10px; color: #333; }
+#emotion-result { display: none; margin-top: 20px; background: var(--success); color: var(--text-dark); }
+.choice-btn { background-color: var(--primary); margin-bottom: 10px; color: var(--text-dark); }
 .choice-btn:nth-child(2) { background-color: var(--accent); }
 .choice-btn:nth-child(3) { background-color: var(--success); }
 #consequence-bubble { display: none; padding: 15px; border-radius: 15px; margin-top: 15px; font-weight: bold; text-align: center; animation: fadeIn 0.3s; }
-
-/* === NISZCZYCIEL ZMARTWIEŃ === */
-textarea { width: 100%; height: 100px; border-radius: 15px; border: 2px solid var(--primary); padding: 15px; font-size: 16px; resize: none; outline: none; background: var(--bg-color); }
-.worry-cloud { display: none; width: 200px; height: 150px; background-color: #6c7a89; border-radius: 50px; margin: 40px auto; color: white; display: flex; justify-content: center; align-items: center; text-align: center; padding: 20px; font-size: 14px; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.2); transition: transform 0.2s, background-color 0.3s; user-select: none; }
+textarea { width: 100%; height: 100px; border-radius: 15px; border: 2px solid var(--primary); padding: 15px; font-size: 16px; resize: none; outline: none; background: var(--bg-color); color: var(--text-dark); }
+.worry-cloud { display: none; width: 200px; height: 150px; background-color: var(--cloud-1); border-radius: 50px; margin: 40px auto; color: white; display: flex; justify-content: center; align-items: center; text-align: center; padding: 20px; font-size: 14px; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.2); transition: 0.2s; user-select: none; }
 #worry-success { display: none; text-align: center; color: var(--secondary); font-size: 20px; font-weight: bold; margin-top: 20px; }
-
-/* === UZIEMIENIE === */
 .breathing-circle { width: 120px; height: 120px; border-radius: 50%; background: var(--primary); margin: 40px auto; display: flex; justify-content: center; align-items: center; color: white; font-weight: bold; font-size: 18px; box-shadow: 0 0 20px var(--primary); animation: breathe 10s infinite ease-in-out; }
 @keyframes breathe { 0% { transform: scale(1); opacity: 0.8; } 40% { transform: scale(1.5); opacity: 1; } 100% { transform: scale(1); opacity: 0.8; } }
 .checklist-item { display: flex; align-items: center; margin-bottom: 12px; padding: 10px; background: var(--bg-color); border-radius: 10px; }
 .checklist-item input[type="checkbox"] { width: 24px; height: 24px; margin-right: 15px; accent-color: var(--secondary); }
-#grounding-success { display: none; background: var(--success); color: #2c5e2c; text-align: center; }
+#grounding-success { display: none; background: var(--success); color: var(--text-dark); text-align: center; }
+
+/* NOWE GRY (Słoik Wdzięczności, Afirmacje) */
+.jar-container { display: flex; justify-content: center; margin-top: 20px; }
+.jar { width: 160px; height: 200px; border: 4px solid var(--primary); border-top: 15px solid var(--jar-lid); border-radius: 10px 10px 40px 40px; background: var(--bg-color); overflow: hidden; display: flex; flex-direction: column-reverse; padding: 10px; gap: 5px; position: relative; box-shadow: inset 0 0 20px rgba(0,0,0,0.05); }
+.jar-note { background: var(--note-bg); padding: 8px; border-radius: 5px; font-size: 12px; text-align: center; animation: dropIn 0.6s cubic-bezier(0.25, 1, 0.5, 1); box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-left: 3px solid var(--note-accent); word-wrap: break-word; color: var(--text-dark); }
+@keyframes dropIn { from { transform: translateY(-250px) rotate(-10deg); opacity: 0; } to { transform: translateY(0) rotate(0); opacity: 1; } }
+
+.word-bank { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 15px; }
+.word-btn { background: var(--card-bg); border: 2px solid var(--accent); padding: 8px 15px; border-radius: 20px; cursor: pointer; color: var(--text-dark); font-weight: bold; transition: 0.2s; }
+.word-btn:active { transform: scale(0.9); }
+.affirmation-board { min-height: 80px; background: var(--bg-color); border-radius: 15px; padding: 15px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center; border: 2px dashed var(--secondary); margin-bottom: 20px; }
+.affirmation-board .word-btn { border-color: var(--success); background: var(--success); color: var(--text-dark); }
+
+/* Dark theme */
+[data-theme="dark"] {
+    --bg-color: #0f1720;
+    --nav-bg: #0b1220;
+    --card-bg: #0b1320;
+    --primary: #1f2937;
+    --secondary: #60a5fa;
+    --accent: #f472b6;
+    --success: #064e3b;
+    --text-dark: #e6eef8;
+    --text-light: #9fb3c8;
+    --success-text: #d1fae5;
+    --wheel-warm: #334155;
+    --wheel-cool: #1e293b;
+    --cloud-1: #334155;
+    --cloud-2: #475569;
+    --cloud-3: #64748b;
+    --jar-lid: #1f2937;
+    --note-bg: #111827;
+    --note-accent: #f59e0b;
+    --choice-passive: #1f2937;
+    --choice-aggressive: #3f1d2a;
+    --choice-assertive: #064e3b;
+    --shadow: 0 8px 20px rgba(0,0,0,0.5);
+}
+
+/* Theme toggle button */
+.theme-toggle { position: fixed; top: 12px; right: 12px; z-index: 2000; padding: 8px 10px; border-radius: 12px; font-size: 16px; background: var(--secondary); color: white; border: none; cursor: pointer; box-shadow: var(--shadow); }
+.theme-toggle:active { transform: scale(0.98); }

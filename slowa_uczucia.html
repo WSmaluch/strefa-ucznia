@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script>
+        (function () {
+            try {
+                if (localStorage.getItem('theme') === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <title>Strefa Ucznia - Słowa i Uczucia</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="card">
+        <h2>Słowa i Uczucia 🧩</h2>
+        <p>Wylosuj zdanie i wybierz emocję, która pasuje najlepiej.</p>
+
+        <div class="card" style="background: var(--bg-color); box-shadow:none; border: 1px dashed var(--secondary);">
+            <h3 id="line" style="color: var(--text-dark); font-size: 16px;">Kliknij „Losuj zdanie”.</h3>
+        </div>
+
+        <button class="btn" onclick="draw()">Losuj zdanie</button>
+
+        <div id="opts" class="word-bank" style="margin-top: 10px;"></div>
+
+        <p id="msg" style="display:none; color: var(--secondary); font-weight: bold; margin-top: 15px;"></p>
+    </div>
+
+    <script>
+        const items = [
+            { line: 'Mam ścisk w brzuchu przed klasówką.', correct: 'Lęk' },
+            { line: 'Ktoś mnie wyśmiał i jest mi ciężko.', correct: 'Smutek' },
+            { line: 'Ktoś przekroczył moją granicę.', correct: 'Złość' },
+            { line: 'Udało mi się coś, z czego jestem dumny/a.', correct: 'Radość' },
+        ];
+
+        const emotions = ['Lęk', 'Smutek', 'Złość', 'Radość'];
+        let current = null;
+
+        function shuffle(a) { return a.slice().sort(() => Math.random() - 0.5); }
+
+        function draw() {
+            current = items[Math.floor(Math.random() * items.length)];
+            document.getElementById('line').innerText = current.line;
+            document.getElementById('msg').style.display = 'none';
+
+            const box = document.getElementById('opts');
+            box.innerHTML = '';
+            shuffle(emotions).forEach((e) => {
+                const b = document.createElement('button');
+                b.className = 'word-btn';
+                b.innerText = e;
+                b.onclick = () => check(e);
+                box.appendChild(b);
+            });
+        }
+
+        function check(selected) {
+            if (!current) return;
+            const ok = selected === current.correct;
+            const msg = ok ? 'Trafione! Nazwanie emocji pomaga.' : `Blisko. Najlepiej pasuje: ${current.correct}.`;
+            const el = document.getElementById('msg');
+            el.innerText = msg;
+            el.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script>
+        (function () {
+            try {
+                if (localStorage.getItem('theme') === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <title>Strefa Ucznia - Detektyw Myśli</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="card">
+        <h2>Detektyw Myśli 🕵️</h2>
+        <p>Wylosuj myśl i sprawdź, czy to fakt, czy „trik” umysłu. Potem dostaniesz zdanie-ramę.</p>
+
+        <div class="card" style="background: var(--bg-color); box-shadow: none; border: 1px dashed var(--secondary);">
+            <h3 id="thought" style="color: var(--text-dark); font-size: 16px;">Kliknij „Losuj myśl”.</h3>
+        </div>
+
+        <button class="btn" onclick="next()">Losuj myśl</button>
+
+        <p style="font-size: 12px; color: var(--text-light); margin-top: 15px;">Jakie to zniekształcenie?</p>
+        <div class="word-bank" id="choices"></div>
+
+        <div id="answer" class="card" style="display:none; margin-top: 15px;">
+            <h3 id="answer-title" style="color: var(--text-dark);">Wynik</h3>
+            <p id="answer-text" style="margin-bottom: 0;"></p>
+        </div>
+
+        <button id="again" class="btn" style="display:none; background: var(--text-dark);" onclick="next()">Następna</button>
+    </div>
+
+    <script>
+        const items = [
+            {
+                thought: "Na pewno wszyscy myślą, że jestem głupi/a.",
+                correct: "Czytanie w myślach",
+                explain: "Nie możesz wiedzieć, co ktoś myśli. To przypuszczenie, nie fakt.",
+                frame: "Nie wiem, co inni myślą. Mogę skupić się na tym, co jest w mojej kontroli."
+            },
+            {
+                thought: "Jeśli zrobię błąd, to będzie tragedia.",
+                correct: "Katastrofizacja",
+                explain: "Umysł skacze od razu do najgorszego scenariusza.",
+                frame: "Błąd jest nieprzyjemny, ale to część nauki. Mogę naprawić mały fragment."
+            },
+            {
+                thought: "Skoro dziś mi nie wyszło, to już nigdy mi nie wyjdzie.",
+                correct: "Uogólnianie",
+                explain: "Jedno wydarzenie nie mówi o całej przyszłości.",
+                frame: "Dziś było trudno. Jutro mogę spróbować inaczej albo poprosić o pomoc."
+            },
+            {
+                thought: "Wszyscy radzą sobie lepiej ode mnie.",
+                correct: "Porównywanie się",
+                explain: "Widzisz tylko kawałek życia innych, a nie cały obraz.",
+                frame: "Mogę porównać się do siebie z wczoraj. Jeden mały krok wystarczy."
+            }
+        ];
+
+        const distortions = [
+            "Czytanie w myślach",
+            "Katastrofizacja",
+            "Uogólnianie",
+            "Porównywanie się"
+        ];
+
+        let current = null;
+
+        function shuffle(arr) {
+            return arr.slice().sort(() => Math.random() - 0.5);
+        }
+
+        function next() {
+            current = items[Math.floor(Math.random() * items.length)];
+            document.getElementById('thought').innerText = current.thought;
+            document.getElementById('answer').style.display = 'none';
+            document.getElementById('again').style.display = 'none';
+
+            const choices = document.getElementById('choices');
+            choices.innerHTML = '';
+            shuffle(distortions).forEach((d) => {
+                const btn = document.createElement('button');
+                btn.className = 'word-btn';
+                btn.innerText = d;
+                btn.onclick = () => check(d);
+                choices.appendChild(btn);
+            });
+        }
+
+        function check(selected) {
+            if (!current) return;
+            const ok = selected === current.correct;
+            const answer = document.getElementById('answer');
+            answer.style.display = 'block';
+            answer.style.background = ok ? 'var(--success)' : 'var(--bg-color)';
+            document.getElementById('answer-title').innerText = ok ? 'Trafione!' : 'Prawie!';
+            document.getElementById('answer-text').innerText = `${current.explain}\n\nRama: ${current.frame}`;
+            document.getElementById('again').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

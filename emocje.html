@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script>
+        (function () {
+            try {
+                if (localStorage.getItem('theme') === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <title>Strefa Ucznia - Emocje</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="card">
+        <h2>Koło Emocji</h2>
+        <p>Kliknij losuj, aby wylosować emocję i otrzymać małe wyzwanie dla siebie.</p>
+        
+        <div class="wheel-container">
+            <div class="wheel-pointer">🔻</div>
+            <div class="wheel" id="emotion-wheel">🎡</div>
+        </div>
+        
+        <button class="btn" onclick="spinWheel()">Losuj emocję</button>
+    </div>
+    
+    <div id="emotion-result" class="card">
+        <h3 id="emotion-title">Emocja</h3>
+        <p id="emotion-task">Zadanie do wykonania...</p>
+    </div>
+
+    
+
+    <script>
+        // Baza emocji i zadań terapeutycznych
+        const emotions = [
+            { name: "Złość 😡", task: "Gdzie w ciele czujesz złość, gdy się zdenerwujesz? Spróbuj teraz mocno zacisnąć pięści i powoli je rozluźnić." },
+            { name: "Radość 😊", task: "Co dzisiaj wywołało u Ciebie chociaż najmniejszy uśmiech? Pomyśl o tym przez 10 sekund." },
+            { name: "Smutek 😢", task: "Wyobraź sobie, że twój smutek to chmura na niebie. Pozwól jej po prostu płynąć. Jaki ma kształt?" },
+            { name: "Lęk 😨", task: "Rozejrzyj się po pokoju i znajdź 3 przedmioty w kolorze niebieskim. Skup na nich wzrok na chwilę." },
+            { name: "Zaskoczenie 😲", task: "Zrób teraz głęboki wdech i wyobraź sobie, że napełniasz brzuch jak balon." },
+            { name: "Wstręt 🤢", task: "Wyobraź sobie bezpieczne miejsce (np. las, plaża). Jakie zapachy tam czujesz? Skup się na tym przez chwilę." }
+        ];
+
+        let currentRotation = 0;
+
+        function spinWheel() {
+            const wheel = document.getElementById('emotion-wheel');
+            const resultBox = document.getElementById('emotion-result');
+            
+            // Ukrywamy wynik na czas kręcenia
+            resultBox.style.display = 'none';
+            
+            // Losowy obrót od 3 do 6 pełnych kółek + reszta
+            const randomDegree = Math.floor(Math.random() * 360) + 1080; 
+            currentRotation += randomDegree;
+            
+            // Animacja kręcenia
+            wheel.style.transform = `rotate(${currentRotation}deg)`;
+            
+            // Czekamy 3 sekundy (tyle trwa animacja CSS) i pokazujemy wynik
+            setTimeout(() => {
+                const randomEmotion = emotions[Math.floor(Math.random() * emotions.length)];
+                document.getElementById('emotion-title').innerText = `Wylosowano: ${randomEmotion.name}`;
+                document.getElementById('emotion-task').innerText = randomEmotion.task;
+                resultBox.style.display = 'block';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script>
+        (function () {
+            try {
+                if (localStorage.getItem('theme') === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <title>Strefa Ucznia - Skan Ciała</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="card">
+        <h2>Skan Ciała 🧍</h2>
+        <p>Wybierz, co czujesz w ciele. Dostaniesz prostą podpowiedź, jak się zaopiekować sobą.</p>
+
+        <p style="font-size: 12px; color: var(--text-light);">Wybierz sygnał:</p>
+        <div class="word-bank">
+            <button class="word-btn" onclick="pick('barki')">Napięte barki</button>
+            <button class="word-btn" onclick="pick('brzuch')">Ścisk w brzuchu</button>
+            <button class="word-btn" onclick="pick('glowa')">Ciężka głowa</button>
+            <button class="word-btn" onclick="pick('serce')">Szybkie serce</button>
+            <button class="word-btn" onclick="pick('pustka')">Pustka / zmęczenie</button>
+            <button class="word-btn" onclick="pick('inne')">Inne</button>
+        </div>
+
+        <div id="box" class="card" style="display:none; margin-top: 15px; background: var(--bg-color); box-shadow: none; border: 1px dashed var(--secondary);">
+            <h3 id="title" style="color: var(--text-dark); font-size: 16px;"></h3>
+            <p id="text" style="margin-bottom: 0; color: var(--text-dark);"></p>
+        </div>
+
+        <button id="reset" class="btn" style="display:none; background: var(--text-dark);" onclick="clearPick()">Wyczyść</button>
+    </div>
+
+    <script>
+        const tips = {
+            barki: { title: 'Napięte barki', text: 'Unieś barki do uszu na 2 sekundy i puść. Powtórz 3 razy.' },
+            brzuch: { title: 'Ścisk w brzuchu', text: 'Połóż dłoń na brzuchu. Wdech 4 sekundy, wydech 6 sekund. 3 razy.' },
+            glowa: { title: 'Ciężka głowa', text: 'Zrób mikro-przerwę: popatrz w dal przez 20 sekund, potem łyk wody.' },
+            serce: { title: 'Szybkie serce', text: 'Nazwij emocję (np. lęk, stres) i zrób 5 spokojnych wydechów (dłuższych niż wdechy).' },
+            pustka: { title: 'Pustka / zmęczenie', text: 'Wybierz jedną rzecz: woda, mała przekąska, 2 minuty odpoczynku. To też jest dbanie o siebie.' },
+            inne: { title: 'Inne', text: 'Spróbuj nazwać to jednym słowem. Potem wybierz najprostszy krok: oddech, przerwa albo rozmowa.' }
+        };
+
+        function pick(key) {
+            const t = tips[key];
+            if (!t) return;
+            document.getElementById('title').innerText = t.title;
+            document.getElementById('text').innerText = t.text;
+            document.getElementById('box').style.display = 'block';
+            document.getElementById('reset').style.display = 'block';
+        }
+
+        function clearPick() {
+            document.getElementById('box').style.display = 'none';
+            document.getElementById('reset').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

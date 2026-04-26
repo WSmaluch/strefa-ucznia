@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script>
+        (function () {
+            try {
+                if (localStorage.getItem('theme') === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <title>Strefa Ucznia - Pytanie Wdzięczności</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="card">
+        <h2>Pytanie Wdzięczności ❓</h2>
+        <p>Jedno pytanie dziennie. Odpowiedz krótko – to wystarczy.</p>
+
+        <div class="card" style="background: var(--bg-color); box-shadow: none; border: 1px dashed var(--secondary);">
+            <h3 id="q" style="color: var(--text-dark); font-size: 16px;">Kliknij „Losuj pytanie”.</h3>
+        </div>
+
+        <button class="btn" onclick="draw()">Losuj pytanie</button>
+
+        <textarea id="a" placeholder="Moja odpowiedź..."></textarea>
+        <button class="btn" style="background: var(--success); color: var(--text-dark);" onclick="save()">Zapisz</button>
+
+        <p id="msg" style="display:none; color: var(--secondary); font-weight: bold; margin-top: 15px;">Zapisane. Dobrze, że zauważasz. ✨</p>
+
+        <div id="last" class="card" style="display:none; margin-top: 15px;"></div>
+    </div>
+
+    <script>
+        const qs = [
+            'Co dziś było choć trochę dobre?',
+            'Kto dziś okazał Ci życzliwość (nawet małą)?',
+            'Za co możesz podziękować swojemu ciału?',
+            'Co Cię dziś choć na chwilę uspokoiło?',
+            'Jaki mały krok dziś zrobiłeś/aś?',
+        ];
+
+        const key = 'gratitudeAnswers';
+        let currentQ = '';
+
+        function draw() {
+            currentQ = qs[Math.floor(Math.random() * qs.length)];
+            document.getElementById('q').innerText = currentQ;
+            document.getElementById('msg').style.display = 'none';
+        }
+
+        function renderLast() {
+            const box = document.getElementById('last');
+            let arr = [];
+            try {
+                const raw = localStorage.getItem(key);
+                arr = raw ? JSON.parse(raw) : [];
+            } catch (e) {}
+
+            if (!arr.length) {
+                box.style.display = 'none';
+                return;
+            }
+
+            box.style.display = 'block';
+            box.style.background = 'var(--bg-color)';
+            box.style.boxShadow = 'none';
+            box.style.border = '1px dashed var(--secondary)';
+            box.innerHTML = '<h3 style="color: var(--text-dark); font-size: 16px;">Ostatnie odpowiedzi</h3>';
+
+            arr.slice(0, 3).forEach((x) => {
+                const p = document.createElement('p');
+                p.style.color = 'var(--text-dark)';
+                p.style.textAlign = 'left';
+                p.style.marginBottom = '8px';
+                p.innerText = `• ${x.q} — ${x.a}`;
+                box.appendChild(p);
+            });
+        }
+
+        function save() {
+            const a = document.getElementById('a').value.trim();
+            if (!a) return;
+            const q = currentQ || 'Wdzięczność:';
+            try {
+                const raw = localStorage.getItem(key);
+                const arr = raw ? JSON.parse(raw) : [];
+                arr.unshift({ q, a, at: Date.now() });
+                while (arr.length > 10) arr.pop();
+                localStorage.setItem(key, JSON.stringify(arr));
+            } catch (e) {}
+
+            document.getElementById('a').value = '';
+            document.getElementById('msg').style.display = 'block';
+            renderLast();
+        }
+
+        renderLast();
+    </script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script>
+        (function () {
+            try {
+                if (localStorage.getItem('theme') === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <title>Strefa Ucznia - Wyzwanie 2 Minuty</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="card">
+        <h2>Wyzwanie 2 Minuty ⏱️</h2>
+        <p>Losuj małe wyzwanie i rób je tylko 2 minuty. Tyle wystarczy, by ruszyć z miejsca.</p>
+
+        <div class="card" style="background: var(--bg-color); box-shadow: none; border: 1px dashed var(--secondary);">
+            <h3 id="challenge" style="color: var(--text-dark); font-size: 16px;">Kliknij „Start”.</h3>
+            <p id="timer" style="margin-bottom: 0; color: var(--text-dark); font-weight: bold;">02:00</p>
+        </div>
+
+        <button id="start" class="btn" onclick="start()">Start</button>
+        <button id="stop" class="btn" style="display:none; background: var(--text-dark);" onclick="reset()">Reset</button>
+
+        <p id="done" style="display:none; color: var(--secondary); font-weight: bold; margin-top: 15px;">Skończone! Nawet mały wysiłek ma znaczenie. ✨</p>
+    </div>
+
+    <script>
+        const challenges = [
+            'Uporządkuj kawałek biurka (tylko jeden róg).',
+            'Zrób 10 spokojnych oddechów.',
+            'Napisz 3 rzeczy, które dziś zrobiłeś/aś dobrze (mogą być małe).',
+            'Rozciągnij kark i ramiona przez chwilę.',
+            'Zacznij najłatwiejsze zadanie szkolne – tylko rozpocznij.',
+            'Przygotuj plecak/zeszyt na jutro – tylko jedną rzecz.'
+        ];
+
+        let intervalId = null;
+        let remaining = 120;
+
+        function format(sec) {
+            const m = String(Math.floor(sec / 60)).padStart(2, '0');
+            const s = String(sec % 60).padStart(2, '0');
+            return `${m}:${s}`;
+        }
+
+        function setUI(running) {
+            document.getElementById('start').style.display = running ? 'none' : 'block';
+            document.getElementById('stop').style.display = running ? 'block' : 'none';
+        }
+
+        function start() {
+            if (intervalId) return;
+            document.getElementById('done').style.display = 'none';
+            document.getElementById('challenge').innerText = challenges[Math.floor(Math.random() * challenges.length)];
+            remaining = 120;
+            document.getElementById('timer').innerText = format(remaining);
+            setUI(true);
+
+            intervalId = setInterval(() => {
+                remaining -= 1;
+                document.getElementById('timer').innerText = format(remaining);
+                if (remaining <= 0) {
+                    clearInterval(intervalId);
+                    intervalId = null;
+                    setUI(false);
+                    document.getElementById('done').style.display = 'block';
+                }
+            }, 1000);
+        }
+
+        function reset() {
+            if (intervalId) {
+                clearInterval(intervalId);
+                intervalId = null;
+            }
+            remaining = 120;
+            document.getElementById('timer').innerText = format(remaining);
+            document.getElementById('challenge').innerText = 'Kliknij „Start”.';
+            document.getElementById('done').style.display = 'none';
+            setUI(false);
+        }
+    </script>
+</body>
+</html>

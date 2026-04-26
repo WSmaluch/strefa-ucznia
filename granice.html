@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script>
+        (function () {
+            try {
+                if (localStorage.getItem('theme') === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <title>Strefa Ucznia - Granice</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="card">
+        <h2>Trening Granic 🛡️</h2>
+        <p>Wylosuj sytuację i wybierz odpowiedź, która chroni Ciebie, ale jest spokojna.</p>
+
+        <div class="card" style="background: var(--bg-color); box-shadow: none; border: 1px dashed var(--secondary);">
+            <h3 id="scene" style="color: var(--text-dark); font-size: 16px;">Kliknij „Losuj sytuację”.</h3>
+        </div>
+
+        <button class="btn" onclick="draw()">Losuj sytuację</button>
+
+        <div id="options" class="word-bank" style="margin-top: 10px;"></div>
+
+        <div id="result" class="card" style="display:none; margin-top: 15px; background: var(--success); color: var(--text-dark);">
+            <h3 style="color: var(--text-dark);">Podpowiedź</h3>
+            <p id="resultText" style="margin-bottom: 0;"></p>
+        </div>
+    </div>
+
+    <script>
+        const data = [
+            {
+                scene: 'Ktoś chce Twoją pracę domową do skopiowania.',
+                good: 'Nie dam do skopiowania, ale mogę wytłumaczyć, jak to zrobić.',
+                ok: 'Dziś nie. Mam swoje rzeczy.',
+                bad: 'Dobra, ale szybko.'
+            },
+            {
+                scene: 'Ktoś wchodzi w Twoją przestrzeń i popycha.',
+                good: 'Stop. Nie popychaj mnie. Odsuń się.',
+                ok: 'Nie rób tak.',
+                bad: 'Oddaję i krzyczę.'
+            },
+            {
+                scene: 'Znajomy pisze w nocy i chce natychmiast odpowiedzi.',
+                good: 'Odpowiem jutro. Teraz odpoczywam.',
+                ok: 'Nie mogę teraz.',
+                bad: 'Odpisuję mimo zmęczenia.'
+            }
+        ];
+
+        let current = null;
+
+        function shuffle(arr) {
+            return arr.slice().sort(() => Math.random() - 0.5);
+        }
+
+        function draw() {
+            current = data[Math.floor(Math.random() * data.length)];
+            document.getElementById('scene').innerText = current.scene;
+            document.getElementById('result').style.display = 'none';
+
+            const options = shuffle([
+                { text: current.good, score: 'good' },
+                { text: current.ok, score: 'ok' },
+                { text: current.bad, score: 'bad' },
+            ]);
+
+            const box = document.getElementById('options');
+            box.innerHTML = '';
+            options.forEach((o) => {
+                const btn = document.createElement('button');
+                btn.className = 'word-btn';
+                btn.style.whiteSpace = 'normal';
+                btn.innerText = o.text;
+                btn.onclick = () => choose(o.score);
+                box.appendChild(btn);
+            });
+        }
+
+        function choose(score) {
+            let text = '';
+            if (score === 'good') text = 'Super. To jasny komunikat + szacunek do siebie.';
+            else if (score === 'ok') text = 'Dobrze. Następnym razem możesz dodać krótkie uzasadnienie lub propozycję.';
+            else text = 'To zrozumiałe, ale spróbuj ochronić siebie spokojnie ("stop" + konkret).';
+
+            document.getElementById('resultText').innerText = text;
+            document.getElementById('result').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script>
+        (function () {
+            try {
+                if (localStorage.getItem('theme') === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <title>Strefa Ucznia - 3 Dźwięki</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="card">
+        <h2>3 Dźwięki 👂</h2>
+        <p>Rozejrzyj się i posłuchaj. Złap 3 dźwięki wokół siebie.</p>
+
+        <button class="btn" onclick="start()">Start</button>
+
+        <div id="list" class="card" style="display:none; margin-top: 15px; background: var(--bg-color); box-shadow:none; border: 1px dashed var(--secondary);"></div>
+
+        <p id="msg" style="display:none; color: var(--secondary); font-weight: bold; margin-top: 15px;">Dobrze. Twój mózg wraca do „tu i teraz”. ✨</p>
+    </div>
+
+    <script>
+        const prompts = [
+            '1) Jaki najcichszy dźwięk słyszysz?',
+            '2) Jaki najbliższy dźwięk słyszysz?',
+            '3) Jaki najdalszy dźwięk słyszysz?'
+        ];
+
+        function start() {
+            const box = document.getElementById('list');
+            box.innerHTML = '<h3 style="color: var(--text-dark); font-size: 16px;">Zapisz 3 dźwięki</h3>';
+
+            prompts.forEach((p, i) => {
+                const label = document.createElement('p');
+                label.style.textAlign = 'left';
+                label.style.color = 'var(--text-dark)';
+                label.style.marginBottom = '6px';
+                label.innerText = p;
+
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.placeholder = 'Np. szum, rozmowa, ptak...';
+                input.style.width = '100%';
+                input.style.padding = '12px';
+                input.style.borderRadius = '12px';
+                input.style.border = '2px solid var(--primary)';
+                input.style.background = 'var(--card-bg)';
+                input.style.color = 'var(--text-dark)';
+                input.oninput = () => {
+                    const all = Array.from(box.querySelectorAll('input')).every(x => x.value.trim().length > 0);
+                    document.getElementById('msg').style.display = all ? 'block' : 'none';
+                };
+
+                box.appendChild(label);
+                box.appendChild(input);
+            });
+
+            box.style.display = 'block';
+            document.getElementById('msg').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

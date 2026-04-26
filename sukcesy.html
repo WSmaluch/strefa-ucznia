@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script>
+        (function () {
+            try {
+                if (localStorage.getItem('theme') === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <title>Strefa Ucznia - Sukcesy</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="card">
+        <h2>3 Sukcesy 🏆</h2>
+        <p>Wpisz trzy małe rzeczy, które dziś Ci wyszły. To trenuje mózg na zauważanie dobrego.</p>
+
+        <textarea id="a" placeholder="Sukces 1..."></textarea>
+        <textarea id="b" placeholder="Sukces 2..." style="margin-top: 10px;"></textarea>
+        <textarea id="c" placeholder="Sukces 3..." style="margin-top: 10px;"></textarea>
+
+        <button class="btn" onclick="save()">Zapisz</button>
+        <button class="btn" style="background: var(--text-dark);" onclick="load()">Wczytaj ostatnie</button>
+
+        <p id="msg" style="display:none; color: var(--secondary); font-weight: bold; margin-top: 15px;">Zapisane. To jest ważne. ✨</p>
+    </div>
+
+    <script>
+        const key = 'wins3';
+
+        function getValues() {
+            return {
+                a: document.getElementById('a').value.trim(),
+                b: document.getElementById('b').value.trim(),
+                c: document.getElementById('c').value.trim(),
+            };
+        }
+
+        function setValues(v) {
+            document.getElementById('a').value = v.a || '';
+            document.getElementById('b').value = v.b || '';
+            document.getElementById('c').value = v.c || '';
+        }
+
+        function save() {
+            const v = getValues();
+            if (!v.a && !v.b && !v.c) return;
+            try { localStorage.setItem(key, JSON.stringify({ ...v, at: Date.now() })); } catch (e) {}
+            document.getElementById('msg').style.display = 'block';
+        }
+
+        function load() {
+            try {
+                const raw = localStorage.getItem(key);
+                if (!raw) return;
+                const v = JSON.parse(raw);
+                setValues(v);
+                document.getElementById('msg').style.display = 'none';
+            } catch (e) {}
+        }
+
+        load();
+    </script>
+</body>
+</html>

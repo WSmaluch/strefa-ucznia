@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script>
+        (function () {
+            try {
+                if (localStorage.getItem('theme') === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <title>Strefa Ucznia - Karty Spokoju</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="card">
+        <h2>Karty Spokoju 🎴</h2>
+        <p>Odkrywaj krótkie ćwiczenia na uspokojenie. Jedna karta = jeden mały krok.</p>
+
+        <div id="card" class="card" style="background: var(--bg-color); box-shadow: none; border: 1px dashed var(--secondary);">
+            <h3 id="card-title" style="color: var(--text-dark); font-size: 16px;">Kliknij „Odkryj kartę”.</h3>
+            <p id="card-text" style="margin-bottom: 0; color: var(--text-dark);"></p>
+        </div>
+
+        <button class="btn" onclick="draw()">Odkryj kartę</button>
+
+        <button id="done" class="btn" style="display:none; background: var(--success); color: var(--text-dark);" onclick="markDone()">Zrobione ✅</button>
+
+        <p id="msg" style="display:none; color: var(--secondary); font-weight: bold; margin-top: 15px;">Dobra robota. Spokój to umiejętność. ✨</p>
+    </div>
+
+    <script>
+        const cards = [
+            { title: '3 spokojne oddechy', text: 'Wdech nosem… wydech ustami. Powtórz 3 razy.' },
+            { title: '5-4-3-2-1 (mini)', text: 'Nazwij: 3 rzeczy, które widzisz; 2 które słyszysz; 1 którą czujesz w ciele.' },
+            { title: 'Dłonie', text: 'Zaciśnij pięści na 3 sekundy i rozluźnij. Powtórz 2 razy.' },
+            { title: 'Szyja i barki', text: 'Unieś barki do uszu… i puść. Zrób to 3 razy.' },
+            { title: 'Zdanie wspierające', text: 'Powiedz w myślach: „Jestem bezpieczny/a w tej chwili.”' },
+            { title: 'Mały łyk wody', text: 'Jeśli możesz, napij się wody i poczuj, jak ciało się uspokaja.' }
+        ];
+
+        let current = null;
+
+        function draw() {
+            current = cards[Math.floor(Math.random() * cards.length)];
+            document.getElementById('card-title').innerText = current.title;
+            document.getElementById('card-text').innerText = current.text;
+            document.getElementById('done').style.display = 'block';
+            document.getElementById('msg').style.display = 'none';
+        }
+
+        function markDone() {
+            if (!current) return;
+            document.getElementById('msg').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

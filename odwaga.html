@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script>
+        (function () {
+            try {
+                if (localStorage.getItem('theme') === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <title>Strefa Ucznia - Mała Odwaga</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="card">
+        <h2>Mała Odwaga 🧗</h2>
+        <p>Losuj drobne wyzwanie odwagi. Małe rzeczy budują pewność.</p>
+
+        <div class="card" style="background: var(--bg-color); box-shadow:none; border: 1px dashed var(--secondary);">
+            <h3 id="c" style="color: var(--text-dark); font-size: 16px;">Kliknij „Losuj”.</h3>
+        </div>
+
+        <button class="btn" onclick="draw()">Losuj</button>
+        <button class="btn" style="background: var(--success); color: var(--text-dark);" onclick="done()">Zrobione ✅</button>
+
+        <p id="msg" style="display:none; color: var(--secondary); font-weight: bold; margin-top: 15px;">Brawo. To naprawdę się liczy. ✨</p>
+    </div>
+
+    <script>
+        const challenges = [
+            'Zadaj jedno pytanie na lekcji (albo po lekcji).',
+            'Napisz do kogoś: „Jak się masz?”.',
+            'Powiedz „nie” jednej małej rzeczy, na którą nie masz siły.',
+            'Zrób 2 minuty pracy nad trudnym zadaniem.',
+            'Powiedz sobie na głos jedno wspierające zdanie.',
+            'Poproś o wyjaśnienie, gdy czegoś nie rozumiesz.'
+        ];
+
+        let current = null;
+
+        function draw() {
+            current = challenges[Math.floor(Math.random() * challenges.length)];
+            document.getElementById('c').innerText = current;
+            document.getElementById('msg').style.display = 'none';
+        }
+
+        function done() {
+            if (!current) return;
+            document.getElementById('msg').style.display = 'block';
+            try { localStorage.setItem('courageLast', current); } catch (e) {}
+        }
+
+        (function init() {
+            try {
+                const saved = localStorage.getItem('courageLast');
+                if (saved) document.getElementById('c').innerText = saved;
+            } catch (e) {}
+        })();
+    </script>
+</body>
+</html>

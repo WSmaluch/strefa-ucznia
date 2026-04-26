@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script>
+        (function () {
+            try {
+                if (localStorage.getItem('theme') === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <title>Strefa Ucznia - Mięśnie</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="card">
+        <h2>Mięśnie: Napnij i Puść 💪</h2>
+        <p>Krótkie rozluźnienie: napnij na 3 sekundy, potem puść. Przechodź krokami.</p>
+
+        <div class="card" style="background: var(--bg-color); box-shadow:none; border: 1px dashed var(--secondary);">
+            <h3 id="part" style="color: var(--text-dark); font-size: 16px;">Kliknij „Następny krok”.</h3>
+            <p id="instr" style="margin-bottom: 0; color: var(--text-dark);"></p>
+        </div>
+
+        <button class="btn" onclick="next()">Następny krok</button>
+        <p id="done" style="display:none; color: var(--secondary); font-weight: bold; margin-top: 15px;">Gotowe. Twoje ciało Ci dziękuje. ✨</p>
+    </div>
+
+    <script>
+        const steps = [
+            { part: 'Dłonie', instr: 'Zaciśnij pięści (3s)… puść.' },
+            { part: 'Ramiona', instr: 'Napnij bicepsy (3s)… puść.' },
+            { part: 'Barki', instr: 'Unieś barki do uszu (3s)… puść.' },
+            { part: 'Twarz', instr: 'Zmarszcz czoło (3s)… puść.' },
+            { part: 'Brzuch', instr: 'Napnij brzuch (3s)… puść.' },
+            { part: 'Nogi', instr: 'Napnij uda (3s)… puść.' },
+        ];
+
+        let i = -1;
+
+        function next() {
+            i += 1;
+            document.getElementById('done').style.display = 'none';
+
+            if (i >= steps.length) {
+                document.getElementById('part').innerText = 'Koniec';
+                document.getElementById('instr').innerText = 'Weź 2 spokojne oddechy.';
+                document.getElementById('done').style.display = 'block';
+                i = -1;
+                return;
+            }
+
+            document.getElementById('part').innerText = steps[i].part;
+            document.getElementById('instr').innerText = steps[i].instr;
+        }
+    </script>
+</body>
+</html>

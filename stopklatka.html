@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script>
+        (function () {
+            try {
+                if (localStorage.getItem('theme') === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <title>Strefa Ucznia - Stop-Klatka</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="card">
+        <h2>Stop-Klatka ⏸️</h2>
+        <p>Wylosuj sytuację, zrób pauzę i wybierz reakcję, która jest dla Ciebie najzdrowsza.</p>
+
+        <div class="card" style="background: var(--bg-color); box-shadow: none; border: 1px dashed var(--secondary);">
+            <h3 id="scene" style="color: var(--text-dark); font-size: 16px;">Kliknij „Losuj sytuację”.</h3>
+        </div>
+
+        <button class="btn" onclick="drawScene()">Losuj sytuację</button>
+
+        <p style="font-size: 12px; color: var(--text-light); margin-top: 15px;">Wybierz reakcję:</p>
+        <div class="word-bank" id="actions">
+            <button class="word-btn" onclick="chooseAction('oddech')">Robię 3 oddechy</button>
+            <button class="word-btn" onclick="chooseAction('granica')">Stawiam granicę</button>
+            <button class="word-btn" onclick="chooseAction('pomoc')">Proszę o pomoc</button>
+            <button class="word-btn" onclick="chooseAction('przerwa')">Biorę przerwę</button>
+        </div>
+
+        <div id="result" class="card" style="display:none; background: var(--success); color: var(--text-dark); margin-top: 15px;">
+            <h3 id="result-title" style="color: var(--text-dark);">Twoja pauza</h3>
+            <p id="result-text" style="margin-bottom: 0;"></p>
+        </div>
+
+        <button id="again" class="btn" style="display:none; background: var(--text-dark);" onclick="drawScene()">Jeszcze raz</button>
+    </div>
+
+    <script>
+        const scenes = [
+            { text: "Ktoś mówi do Ciebie niemiło na przerwie.", prompts: {
+                oddech: "Super. Zanim odpowiesz, ciało ma szansę się uspokoić.",
+                granica: "Możesz powiedzieć: 'Nie podoba mi się ten ton. Porozmawiajmy spokojnie.'",
+                pomoc: "Możesz podejść do nauczyciela lub kolegi: 'Potrzebuję wsparcia'.",
+                przerwa: "Odejście na chwilę to też odwaga. Wracasz, gdy jesteś gotowy/a."
+            }},
+            { text: "Dostajesz gorszą ocenę, niż się spodziewałeś/aś.", prompts: {
+                oddech: "Daj sobie 10 sekund. Jedna ocena nie definiuje Ciebie.",
+                granica: "Możesz nie porównywać się teraz z innymi. Skup się na swoim planie.",
+                pomoc: "Możesz poprosić: 'Czy mogę dowiedzieć się, co poprawić?'.",
+                przerwa: "Zrób przerwę i wróć do tego, gdy emocje opadną."
+            }},
+            { text: "Masz wrażenie, że wszyscy coś umieją, tylko Ty nie.", prompts: {
+                oddech: "Zauważ tę myśl i pozwól jej minąć. To nie fakt.",
+                granica: "Możesz powiedzieć sobie: 'Uczę się w swoim tempie'.",
+                pomoc: "Możesz zapytać: 'Pomożesz mi zacząć?'.",
+                przerwa: "Daj sobie chwilę. Potem wybierz jeden mały krok."
+            }},
+            { text: "Kolega wyśmiewa Twoje zainteresowania.", prompts: {
+                oddech: "Oddech pomaga nie wejść w impuls.",
+                granica: "Możesz powiedzieć: 'To dla mnie ważne. Proszę, nie śmiej się z tego'.",
+                pomoc: "Możesz poszukać osoby, przy której czujesz się bezpiecznie.",
+                przerwa: "Odejście chroni Twoją energię."
+            }}
+        ];
+
+        let currentScene = null;
+
+        function drawScene() {
+            currentScene = scenes[Math.floor(Math.random() * scenes.length)];
+            document.getElementById('scene').innerText = currentScene.text;
+            document.getElementById('result').style.display = 'none';
+            document.getElementById('again').style.display = 'none';
+        }
+
+        function chooseAction(type) {
+            if (!currentScene) return;
+            const messages = currentScene.prompts;
+            document.getElementById('result-title').innerText = "Wybrałeś/aś: " + (type === 'oddech' ? 'Oddech' : type === 'granica' ? 'Granicę' : type === 'pomoc' ? 'Pomoc' : 'Przerwę');
+            document.getElementById('result-text').innerText = messages[type];
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('again').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

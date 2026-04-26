@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script>
+        (function () {
+            try {
+                if (localStorage.getItem('theme') === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <title>Strefa Ucznia - Stop Porównaniom</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="card">
+        <h2>Stop Porównaniom 🚫</h2>
+        <p>Porównania bolą. Zrób reset: zamień je na konkret o sobie.</p>
+
+        <textarea id="in" placeholder="Np. 'On/ona jest lepszy/a ode mnie'..."></textarea>
+        <button class="btn" onclick="convert()">Zamień</button>
+
+        <div id="box" class="card" style="display:none; margin-top: 15px; background: var(--bg-color); box-shadow:none; border: 1px dashed var(--secondary);">
+            <h3 style="color: var(--text-dark); font-size: 16px;">Nowe zdanie</h3>
+            <p id="out" style="margin-bottom: 0; color: var(--text-dark);"></p>
+        </div>
+
+        <p id="msg" style="display:none; color: var(--secondary); font-weight: bold; margin-top: 15px;">Dobrze. Skupiasz się na tym, co Twoje. ✨</p>
+    </div>
+
+    <script>
+        function convert() {
+            const t = document.getElementById('in').value.trim();
+            if (!t) return;
+            const out = 'Uczę się w swoim tempie. Dziś robię jeden mały krok do przodu.';
+            document.getElementById('out').innerText = out;
+            document.getElementById('box').style.display = 'block';
+            document.getElementById('msg').style.display = 'block';
+            try { localStorage.setItem('compareReset', out); } catch (e) {}
+        }
+
+        (function init() {
+            try {
+                const saved = localStorage.getItem('compareReset');
+                if (saved) {
+                    document.getElementById('out').innerText = saved;
+                    document.getElementById('box').style.display = 'block';
+                }
+            } catch (e) {}
+        })();
+    </script>
+</body>
+</html>

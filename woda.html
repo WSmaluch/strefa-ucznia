@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script>
+        (function () {
+            try {
+                if (localStorage.getItem('theme') === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <title>Strefa Ucznia - Woda</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="card">
+        <h2>Liczniki: Woda 💧</h2>
+        <p>Klikaj +1 za każdy łyk/szklankę. Proste nawyki mają moc.</p>
+
+        <div class="card" style="background: var(--bg-color); box-shadow:none; border: 1px dashed var(--secondary);">
+            <h3 style="color: var(--text-dark); font-size: 16px;">Dziś</h3>
+            <p id="n" style="margin-bottom: 0; color: var(--text-dark); font-weight: bold; font-size: 26px;">0</p>
+        </div>
+
+        <button class="btn" onclick="inc()">+1</button>
+        <button class="btn" style="background: var(--text-dark);" onclick="reset()">Reset</button>
+
+        <p id="msg" style="display:none; color: var(--secondary); font-weight: bold; margin-top: 15px;">Super. Twoje ciało lubi wodę. ✨</p>
+    </div>
+
+    <script>
+        const key = 'waterCount';
+
+        function get() {
+            try { return Number(localStorage.getItem(key) || '0'); } catch (e) { return 0; }
+        }
+
+        function set(v) {
+            try { localStorage.setItem(key, String(v)); } catch (e) {}
+            document.getElementById('n').innerText = String(v);
+        }
+
+        function inc() {
+            const v = get() + 1;
+            set(v);
+            document.getElementById('msg').style.display = v >= 3 ? 'block' : 'none';
+        }
+
+        function reset() {
+            set(0);
+            document.getElementById('msg').style.display = 'none';
+        }
+
+        set(get());
+    </script>
+</body>
+</html>

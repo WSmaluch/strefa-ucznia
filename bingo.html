@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script>
+        (function () {
+            try {
+                if (localStorage.getItem('theme') === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <title>Strefa Ucznia - Bingo</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="card">
+        <h2>Bingo Samoopieki ✅</h2>
+        <p>Odhacz małe rzeczy. Cel: minimum 5 pól dziś.</p>
+
+        <div id="grid" class="card" style="background: var(--bg-color); box-shadow: none; border: 1px dashed var(--secondary);"></div>
+
+        <button class="btn" onclick="reset()">Wyczyść</button>
+        <p id="msg" style="display:none; color: var(--secondary); font-weight: bold; margin-top: 15px;">Brawo! Małe rzeczy budują duży spokój. ✨</p>
+    </div>
+
+    <script>
+        const items = [
+            'Łyk wody',
+            '3 oddechy',
+            'Krótki spacer',
+            'Porządek 2 min',
+            'Miłe zdanie do siebie',
+            'Muzyka na chwilę',
+            'Rozciąganie',
+            'Przerwa od ekranu',
+            'Ktoś miły: napisz',
+        ];
+
+        function key(i) { return `bingo_${i}`; }
+
+        function render() {
+            const grid = document.getElementById('grid');
+            grid.innerHTML = '';
+            grid.style.display = 'grid';
+            grid.style.gridTemplateColumns = '1fr 1fr 1fr';
+            grid.style.gap = '10px';
+
+            let checkedCount = 0;
+
+            items.forEach((text, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'word-btn';
+                btn.style.width = '100%';
+                btn.style.minHeight = '60px';
+                btn.style.whiteSpace = 'normal';
+
+                let checked = false;
+                try { checked = localStorage.getItem(key(i)) === '1'; } catch (e) {}
+
+                if (checked) {
+                    checkedCount += 1;
+                    btn.style.borderColor = 'var(--success)';
+                    btn.style.background = 'var(--success)';
+                }
+
+                btn.innerText = text;
+                btn.onclick = () => {
+                    const next = !checked;
+                    checked = next;
+                    try { localStorage.setItem(key(i), next ? '1' : '0'); } catch (e) {}
+                    render();
+                };
+
+                grid.appendChild(btn);
+            });
+
+            document.getElementById('msg').style.display = checkedCount >= 5 ? 'block' : 'none';
+        }
+
+        function reset() {
+            try { items.forEach((_, i) => localStorage.removeItem(key(i))); } catch (e) {}
+            render();
+        }
+
+        render();
+    </script>
+</body>
+</html>
