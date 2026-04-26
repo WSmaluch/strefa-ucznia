@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Strefa Ucznia - Uziemienie</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="card">
+        <h2>Strefa Uziemienia</h2>
+        <p>Czujesz silny stres? Oddychaj razem z kołem i rozejrzyj się wokół siebie.</p>
+        
+        <div class="breathing-circle" id="breath-circle">WDECH</div>
+        
+        <p style="font-weight: bold; margin-top: 30px;">Technika 5-4-3-2-1</p>
+        <div id="checklist"></div>
+    </div>
+    
+    <div id="grounding-success" class="card">
+        <h3>Świetnie!</h3>
+        <p>Wracasz do "tu i teraz". Pamiętaj, że jesteś bezpieczny/a.</p>
+    </div>
+
+    <nav class="navbar">
+        <a href="index.html" class="nav-item"><span class="nav-icon">🎡</span><span>Emocje</span></a>
+        <a href="wybory.html" class="nav-item"><span class="nav-icon">💬</span><span>Wybory</span></a>
+        <a href="mysli.html" class="nav-item"><span class="nav-icon">☁️</span><span>Myśli</span></a>
+        <a href="uziemienie.html" class="nav-item active"><span class="nav-icon">🧘</span><span>Uziemienie</span></a>
+    </nav>
+
+    <script>
+        const groundingItems = [
+            "5 rzeczy, które teraz widzę",
+            "4 rzeczy, których mogę dotknąć",
+            "3 rzeczy, które teraz słyszę",
+            "2 rzeczy, których zapach czuję",
+            "1 dobra rzecz o mnie samym/samej"
+        ];
+
+        function initGrounding() {
+            const list = document.getElementById('checklist');
+            groundingItems.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'checklist-item';
+                div.innerHTML = `<input type="checkbox" id="g-item-${index}" onchange="checkGrounding()"> <label for="g-item-${index}">${item}</label>`;
+                list.appendChild(div);
+            });
+
+            const circle = document.getElementById('breath-circle');
+            setInterval(() => {
+                circle.innerText = "WYDECH";
+                setTimeout(() => { circle.innerText = "WDECH"; }, 6000);
+            }, 10000);
+        }
+
+        function checkGrounding() {
+            const checkboxes = document.querySelectorAll('#checklist input[type="checkbox"]');
+            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+            document.getElementById('grounding-success').style.display = allChecked ? 'block' : 'none';
+        }
+
+        window.onload = initGrounding;
+    </script>
+</body>
+</html>

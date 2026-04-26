@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Strefa Ucznia - Wybory</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="card">
+        <h2>Symulator Wyborów</h2>
+        <p>Jak zachowasz się w tej sytuacji? Wybierz opcję, która najbardziej Ci pasuje. Pamiętaj: nie ma tu złych ocen.</p>
+        
+        <div class="card" style="background: var(--bg-color); box-shadow: none; border: 1px dashed var(--secondary);">
+            <h3 id="sim-scenario" style="color: var(--text-dark); font-size: 16px;">Ładowanie sytuacji...</h3>
+        </div>
+        
+        <div id="sim-buttons">
+            <button class="btn choice-btn" onclick="makeChoice('passive')">Opcja 1</button>
+            <button class="btn choice-btn" onclick="makeChoice('aggressive')">Opcja 2</button>
+            <button class="btn choice-btn" onclick="makeChoice('assertive')">Opcja 3</button>
+        </div>
+        
+        <div id="consequence-bubble"></div>
+        <button id="next-scenario-btn" class="btn" style="display: none; background: var(--text-dark);" onclick="loadScenario()">Następna sytuacja</button>
+    </div>
+
+    <nav class="navbar">
+        <a href="index.html" class="nav-item"><span class="nav-icon">🎡</span><span>Emocje</span></a>
+        <a href="wybory.html" class="nav-item active"><span class="nav-icon">💬</span><span>Wybory</span></a>
+        <a href="mysli.html" class="nav-item"><span class="nav-icon">☁️</span><span>Myśli</span></a>
+        <a href="uziemienie.html" class="nav-item"><span class="nav-icon">🧘</span><span>Uziemienie</span></a>
+    </nav>
+
+    <script>
+        const scenarios = [
+            { text: "Ktoś w klasie głośno wyśmiewa Twoje hobby. Co robisz?", passive: { text: "Milczysz i opuszczasz wzrok, czując wstyd.", consequence: "Schowałeś/aś emocje w sobie. Pamiętaj, masz prawo do swoich pasji!", color: "#ffd3b6" }, aggressive: { text: "Krzyczysz: 'Zamknij się, sam jesteś głupi!'", consequence: "Zrobiła się awantura. Problem nie zniknął, a stres tylko wzrósł.", color: "#ffb3b3" }, assertive: { text: "Mówisz spokojnie: 'Lubię to robić i nie podoba mi się, że się z tego śmiejesz.'", consequence: "Postawiłeś/aś granicę! Obronienie siebie w spokojny sposób daje siłę. Brawo!", color: "#c1e1c1" } },
+            { text: "Znajomy prosi o pożyczenie pracy domowej do skopiowania, a ty się napracowałeś/aś i nie chcesz tego robić.", passive: { text: "Oddajesz zeszyt, chociaż bardzo nie chcesz.", consequence: "Pominąłeś/aś swoje potrzeby dla kogoś innego. Następnym razem spróbuj odmówić.", color: "#ffd3b6" }, aggressive: { text: "Rzucasz zeszytem i mówisz: 'Odpisz się, leniu!'", consequence: "Agresja niszczy relacje. Można było odmówić łagodniej.", color: "#ffb3b3" }, assertive: { text: "Mówisz: 'Nie dam ci skopiować, ale mogę ci wytłumaczyć, jak to zrobić.'", consequence: "Jasny komunikat i propozycja uczciwej pomocy. Super zachowanie!", color: "#c1e1c1" } },
+            { text: "Dostajesz słabszą ocenę ze sprawdzianu, choć uczyłeś/aś się długo.", passive: { text: "Myślisz: 'Jestem beznadziejny/a, nigdy się tego nie nauczę'.", consequence: "To zniekształcenie poznawcze. Jedna ocena nie świadczy o Tobie!", color: "#ffd3b6" }, aggressive: { text: "Kłócisz się z nauczycielem i oskarżasz go o niesprawiedliwość.", consequence: "Złość przejęła kontrolę. Lepiej ochłonąć przed rozmową.", color: "#ffb3b3" }, assertive: { text: "Pytasz nauczyciela, co możesz poprawić i na czym polegały błędy.", consequence: "Asertywne podejście do własnego rozwoju. Skupiasz się na rozwiązaniu!", color: "#c1e1c1" } }
+        ];
+
+        let currentScenarioIndex = 0;
+
+        function loadScenario() {
+            let newIndex = currentScenarioIndex;
+            while(newIndex === currentScenarioIndex && scenarios.length > 1) { newIndex = Math.floor(Math.random() * scenarios.length); }
+            currentScenarioIndex = newIndex;
+            const scenario = scenarios[currentScenarioIndex];
+
+            document.getElementById('sim-scenario').innerText = scenario.text;
+            const options = [{ type: 'passive', text: scenario.passive.text }, { type: 'aggressive', text: scenario.aggressive.text }, { type: 'assertive', text: scenario.assertive.text }].sort(() => Math.random() - 0.5);
+
+            document.querySelectorAll('.choice-btn').forEach((btn, index) => {
+                btn.innerText = options[index].text;
+                btn.onclick = () => makeChoice(options[index].type);
+                btn.style.display = 'block';
+            });
+
+            document.getElementById('consequence-bubble').style.display = 'none';
+            document.getElementById('next-scenario-btn').style.display = 'none';
+        }
+
+        function makeChoice(type) {
+            const result = scenarios[currentScenarioIndex][type];
+            const bubble = document.getElementById('consequence-bubble');
+            bubble.innerText = result.consequence;
+            bubble.style.backgroundColor = result.color;
+            bubble.style.display = 'block';
+            document.querySelectorAll('.choice-btn').forEach(btn => btn.style.display = 'none');
+            document.getElementById('next-scenario-btn').style.display = 'block';
+        }
+
+        window.onload = loadScenario;
+    </script>
+</body>
+</html>

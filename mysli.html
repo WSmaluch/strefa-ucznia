@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Strefa Ucznia - Myśli</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="card">
+        <h2>Niszczyciel Zmartwień</h2>
+        <p>Zapisz coś, co Cię dzisiaj stresuje. Potem zamień to w chmurę i zniszcz ją swoim dotykiem.</p>
+        
+        <div id="worry-input-area">
+            <textarea id="worry-text" placeholder="Co Cię dzisiaj martwi?..."></textarea>
+            <button class="btn" onclick="createCloud()">Wypuść to</button>
+        </div>
+        
+        <div id="worry-cloud" class="worry-cloud" onclick="tapCloud()">
+            <span id="worry-cloud-text">Moje zmartwienie</span>
+        </div>
+        
+        <div id="worry-success">
+            <p>🎉 PYK! 🎉</p>
+            <p>To tylko myśl. Dałeś/aś radę ją wypuścić!</p>
+            <button class="btn" style="background: var(--success); color: #333;" onclick="resetWorry()">Kolejne zmartwienie</button>
+        </div>
+    </div>
+
+    <nav class="navbar">
+        <a href="index.html" class="nav-item"><span class="nav-icon">🎡</span><span>Emocje</span></a>
+        <a href="wybory.html" class="nav-item"><span class="nav-icon">💬</span><span>Wybory</span></a>
+        <a href="mysli.html" class="nav-item active"><span class="nav-icon">☁️</span><span>Myśli</span></a>
+        <a href="uziemienie.html" class="nav-item"><span class="nav-icon">🧘</span><span>Uziemienie</span></a>
+    </nav>
+
+    <script>
+        let tapCount = 0;
+        
+        function createCloud() {
+            const text = document.getElementById('worry-text').value.trim();
+            if(!text) return;
+            document.getElementById('worry-input-area').style.display = 'none';
+            const cloud = document.getElementById('worry-cloud');
+            document.getElementById('worry-cloud-text').innerText = text;
+            cloud.style.display = 'flex';
+            cloud.style.opacity = '1';
+            cloud.style.transform = 'scale(1)';
+            cloud.style.backgroundColor = '#6c7a89';
+            tapCount = 0;
+        }
+
+        function tapCloud() {
+            tapCount++;
+            const cloud = document.getElementById('worry-cloud');
+            if(tapCount === 1) { cloud.style.transform = 'scale(1.1)'; cloud.style.backgroundColor = '#95a5a6'; } 
+            else if (tapCount === 2) { cloud.style.transform = 'scale(1.2)'; cloud.style.backgroundColor = '#bdc3c7'; } 
+            else if (tapCount >= 3) {
+                cloud.style.transform = 'scale(1.5)';
+                cloud.style.opacity = '0';
+                setTimeout(() => {
+                    cloud.style.display = 'none';
+                    document.getElementById('worry-success').style.display = 'block';
+                }, 300);
+            }
+        }
+
+        function resetWorry() {
+            document.getElementById('worry-text').value = '';
+            document.getElementById('worry-success').style.display = 'none';
+            document.getElementById('worry-input-area').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
